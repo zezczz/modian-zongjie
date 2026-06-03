@@ -12,7 +12,9 @@
 ## 目录结构
 
 ```
-main.html          总览脑图
+main.html          总览入口（壳页面）
+overview-data.js   总览章节布局与连线（改这里调位置）
+overview.js        总览画布逻辑
 detail-maps.js     总览 → 详细页路由
 detail-viewer.js   详细页查看器
 pages/             各章节详细页
