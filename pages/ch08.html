@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!-- 本文件：Ch8 反馈 详细页 — 直接修改下方 PAGE_CONFIG 即可 -->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ch8 反馈</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../detail-page.css">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']], processEscapes: true },
+            options: { ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body class="w-screen h-screen flex flex-col">
+    <header class="shrink-0 bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between gap-4 z-30">
+        <div class="flex items-center gap-3 min-w-0">
+            <a id="home-link" href="../main.html" class="shrink-0 p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" title="返回总览"><i class="fa-solid fa-arrow-left"></i></a>
+            <div class="min-w-0">
+                <h1 id="page-title" class="text-base font-bold text-white truncate">详细思维导图</h1>
+                <p id="page-subtitle" class="text-xs text-slate-400 truncate"></p>
+            </div>
+        </div>
+        <div class="flex gap-2 shrink-0 flex-wrap justify-end">
+            <button id="toggle-notes-btn" onclick="toggleNotes()" class="hidden px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-book-open mr-1"></i> <span id="toggle-notes-label">展开笔记</span></button>
+            <button onclick="zoom(1.15)" class="p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition" title="放大"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            <button onclick="zoom(0.87)" class="p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition" title="缩小"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+            <button onclick="fitToView()" class="p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition" title="查看全图"><i class="fa-solid fa-expand"></i></button>
+        </div>
+    </header>
+    <div class="flex-1 relative flex overflow-hidden">
+        <div id="workspace" class="flex-1 relative bg-slate-950 bg-grid overflow-hidden canvas-container"
+             onmousedown="startDrag(event)" onmousemove="drag(event)" onmouseup="endDrag()" onmouseleave="endDrag()">
+            <div id="canvas"></div>
+            <div id="image-nav" class="hidden absolute top-4 left-4 z-10 flex flex-col gap-1 max-w-[160px]"></div>
+            <div id="loading" class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm z-10 bg-slate-950/80"><i class="fa-solid fa-spinner fa-spin mr-2"></i> 加载导图…</div>
+            <div id="error" class="hidden absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-3 p-6 text-center z-10">
+                <i class="fa-solid fa-image text-3xl text-slate-600"></i><p id="error-text">导图未找到</p>
+                <a href="../main.html" class="text-indigo-400 hover:text-indigo-300 text-sm">返回总览</a>
+            </div>
+            <div class="absolute bottom-4 left-4 z-10 bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-slate-800 text-xs text-slate-400 max-w-xs"><i class="fa-solid fa-hand"></i> 拖拽平移 · 滚轮缩放 · <b>查看全图</b></div>
+        </div>
+        <aside id="notes-panel" class="w-full max-w-md bg-slate-900 border-l border-slate-800 flex flex-col shrink-0 transition-transform duration-300 absolute right-0 top-0 bottom-0 z-20 md:max-w-sm">
+            <div class="p-4 border-b border-slate-800 flex justify-between items-center shrink-0">
+                <h2 class="text-sm font-bold text-white"><i class="fa-solid fa-list-ul text-indigo-400 mr-1"></i> 文字笔记</h2>
+                <button onclick="toggleNotes(false)" class="p-1.5 text-slate-400 hover:text-white rounded"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="notes-content" class="notes-scroll flex-1 overflow-y-auto p-4 space-y-4 tex2jax_process text-sm text-slate-300 leading-relaxed"></div>
+        </aside>
+    </div>
+
+    <script>
+    window.PAGE_CONFIG = {
+        title: 'Ch8 反馈',
+        subtitle: '正负反馈判断',
+        images: [
+            { src: '../images/反馈/正负反馈判断依据.png', title: '正负反馈判断依据' }
+        ],
+        sections: [
+            {
+                title: '反馈分类与判别 [必考]',
+                body: `正/负：瞬时极性法
+串联/并联：输入端连接方式
+电压/电流：负载短路法`
+            },
+            {
+                title: '四种负反馈组态 [必考]',
+                body: `电压串联 · 电压并联 · 电流串联 · 电流并联`
+            },
+            {
+                title: '深度负反馈近似 [必考]',
+                body: `核心：$x_f \\approx x_i$
+电压串联：$A_{vf}=1+R_f/R_1$`
+            }
+        ]
+    };
+    </script>
+    <script src="../detail-utils.js"></script>
+    <script src="../detail-viewer.js"></script>
+</body>
+</html>

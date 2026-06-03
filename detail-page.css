@@ -1,0 +1,43 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
+    background-color: #0f172a;
+    color: #f8fafc;
+    overflow: hidden;
+    user-select: none;
+}
+.bg-grid {
+    background-size: 40px 40px;
+    background-image:
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+}
+.canvas-container { cursor: grab; }
+.canvas-container:active { cursor: grabbing; }
+#canvas { position: absolute; transform-origin: 0 0; }
+.mindmap-block { position: absolute; left: 0; }
+.mindmap-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #a5b4fc;
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    border-radius: 9999px;
+    padding: 0.2rem 0.65rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+.mindmap-img-item {
+    display: block;
+    max-width: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(71, 85, 105, 0.5);
+}
+#notes-panel { transform: translateX(100%); }
+#notes-panel.open { transform: translateX(0); }
+#notes-panel .notes-scroll { user-select: text; }
+#image-nav button.active {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: rgba(129, 140, 248, 0.6);
+    color: #c7d2fe;
+}

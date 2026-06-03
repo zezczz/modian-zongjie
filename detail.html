@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>跳转中…</title>
+    <script src="detail-maps.js"></script>
+    <script>
+        const id = new URLSearchParams(location.search).get('id');
+        const target = id && LEGACY_DETAIL_REDIRECT[id];
+        location.replace(target || 'main.html');
+    </script>
+</head>
+<body></body>
+</html>
