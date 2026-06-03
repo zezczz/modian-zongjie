@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- 本文件：Ch10 信号处理 详细页 -->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ch10 信号处理</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../detail-page.css">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']], processEscapes: true },
+            options: { ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+<body class="w-screen h-screen flex flex-col">
+    <header class="shrink-0 bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between gap-4 z-30">
+        <div class="flex items-center gap-3 min-w-0">
+            <a id="home-link" href="../main.html" class="shrink-0 p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" title="返回总览"><i class="fa-solid fa-arrow-left"></i></a>
+            <div class="min-w-0">
+                <h1 id="page-title" class="text-base font-bold text-white truncate">详细思维导图</h1>
+                <p id="page-subtitle" class="text-xs text-slate-400 truncate"></p>
+            </div>
+        </div>
+        <div class="flex gap-2 shrink-0 flex-wrap justify-end">
+            <button id="toggle-notes-btn" onclick="toggleNotes()" class="hidden px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-book-open mr-1"></i> <span id="toggle-notes-label">展开笔记</span></button>
+            <button onclick="zoom(1.15)" class="p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition" title="放大"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            <button onclick="zoom(0.87)" class="p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition" title="缩小"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+            <button onclick="fitToView()" class="p-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg border border-slate-700 transition" title="查看全图"><i class="fa-solid fa-expand"></i></button>
+        </div>
+    </header>
+    <div class="flex-1 relative flex overflow-hidden">
+        <div id="workspace" class="flex-1 relative bg-slate-950 bg-grid overflow-hidden canvas-container"
+             onmousedown="startDrag(event)" onmousemove="drag(event)" onmouseup="endDrag()" onmouseleave="endDrag()">
+            <div id="canvas"></div>
+            <div id="image-nav" class="hidden absolute top-4 left-4 z-10 flex flex-col gap-1 max-w-[160px]"></div>
+            <div id="loading" class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm z-10 bg-slate-950/80"><i class="fa-solid fa-spinner fa-spin mr-2"></i> 加载导图…</div>
+            <div id="error" class="hidden absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-3 p-6 text-center z-10">
+                <i class="fa-solid fa-image text-3xl text-slate-600"></i><p id="error-text">导图未找到</p>
+                <a href="../main.html" class="text-indigo-400 hover:text-indigo-300 text-sm">返回总览</a>
+            </div>
+            <div class="absolute bottom-4 left-4 z-10 bg-slate-900/90 backdrop-blur-md px-4 py-2 rounded-xl border border-slate-800 text-xs text-slate-400 max-w-xs"><i class="fa-solid fa-hand"></i> 拖拽平移 · 滚轮缩放 · <b>查看全图</b></div>
+        </div>
+        <aside id="notes-panel" class="w-full max-w-md bg-slate-900 border-l border-slate-800 flex flex-col shrink-0 transition-transform duration-300 absolute right-0 top-0 bottom-0 z-20 md:max-w-sm">
+            <div class="p-4 border-b border-slate-800 flex justify-between items-center shrink-0">
+                <h2 class="text-sm font-bold text-white"><i class="fa-solid fa-list-ul text-indigo-400 mr-1"></i> 文字笔记</h2>
+                <button onclick="toggleNotes(false)" class="p-1.5 text-slate-400 hover:text-white rounded"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="notes-content" class="notes-scroll flex-1 overflow-y-auto p-4 space-y-4 tex2jax_process text-sm text-slate-300 leading-relaxed"></div>
+        </aside>
+    </div>
+
+    <script>
+    window.PAGE_CONFIG = {
+        title: 'Ch10 信号处理',
+        subtitle: '滤波 · 振荡 · 比较 · 波形',
+        images: [
+            { src: '../images/信号/一阶有源低通滤波.jpg', title: '一阶有源低通滤波' },
+            { src: '../images/信号/压控电压源型二阶低通滤波电路.jpg', title: '二阶低通滤波' },
+            { src: '../images/信号/RC桥式振荡电路.jpg', title: 'RC桥式振荡' },
+            { src: '../images/信号/单门限比较器.jpg', title: '单门限比较器' },
+            { src: '../images/信号/反相输入迟滞比较器电路.jpg', title: '迟滞比较器' },
+            { src: '../images/信号/方波产生电路.jpg', title: '方波产生电路' }
+        ],
+        sections: [
+            {
+                title: '有源滤波 [重点]',
+                body: `LPF / HPF / BPF / BEF / APF
+优点：无电感、体积小、可有增益
+二阶低通：$A(s)=\\frac{A_{vf}\\omega_n^2}{s^2+\\frac{\\omega_n}{Q}s+\\omega_n^2}$`
+            },
+            {
+                title: '正弦波振荡 [必考]',
+                body: `振荡：$|AF|=1$，$\\angle AF=2n\\pi$
+起振：$|AF|>1$
+RC（文氏电桥）：$f_0=1/(2\\pi RC)$，需 $|A|\\geq 3$
+LC：$f_0=1/(2\\pi\\sqrt{LC})$`
+            },
+            {
+                title: '电压比较器 [高频]',
+                body: `过零比较器：$v_I>0 \\to +V_{om}$
+滞回比较器（施密特）：双阈值，抗干扰强`
+            },
+            {
+                title: '非正弦产生 [高频]',
+                body: `方波：比较器 + RC 充放电
+$T=2RC\\ln(1+2R_1/R_2)$
+三角波：方波 + 积分电路`
+            }
+        ]
+    };
+    </script>
+    <script src="../detail-utils.js"></script>
+    <script src="../detail-viewer.js"></script>
+</body>
+</html>

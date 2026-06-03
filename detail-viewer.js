@@ -190,14 +190,37 @@ function initDetailViewer(config, options = {}) {
         document.getElementById('error-text').textContent = msg;
     }
 
+    function runNotesOnly() {
+        document.body.classList.add('detail-notes-only');
+        workspace.querySelector('.canvas-hint')?.classList.add('hidden');
+        canvas.innerHTML = `
+            <div class="notes-only-placeholder flex flex-col items-center justify-center min-h-[280px] px-8 text-center">
+                <i class="fa-solid fa-book-open text-4xl text-indigo-400/80 mb-4"></i>
+                <p class="text-slate-300 text-sm max-w-md">本章暂无导图图片，请展开右侧 <b>文字笔记</b> 复习要点。</p>
+            </div>`;
+        contentWidth = 400;
+        contentHeight = 280;
+        canvas.style.width = `${contentWidth}px`;
+        canvas.style.height = `${contentHeight}px`;
+        loading.classList.add('hidden');
+        notesOpen = true;
+        notesPanel.classList.add('open');
+        document.getElementById('toggle-notes-label').textContent = '收起笔记';
+        window.fitToView();
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([notesContent]).catch(() => {});
+        }
+    }
+
     async function run() {
         if (!config) {
             showError('未配置 PAGE_CONFIG');
             return;
         }
         const items = getDetailImages(config);
-        if (!items.length) {
-            showError('请在 PAGE_CONFIG.images 中添加导图图片');
+        const notesOnly = !items.length && config.sections && config.sections.length;
+        if (!items.length && !notesOnly) {
+            showError('请在 PAGE_CONFIG.images 中添加导图，或配置 sections 文字笔记');
             return;
         }
 
@@ -206,8 +229,13 @@ function initDetailViewer(config, options = {}) {
         const countHint = items.length > 1 ? `共 ${items.length} 张 · ` : '';
         document.getElementById('page-subtitle').textContent = countHint + (config.subtitle || '详细思维导图');
         renderNotes();
-        renderImageNav(items);
 
+        if (notesOnly) {
+            runNotesOnly();
+            return;
+        }
+
+        renderImageNav(items);
         try {
             await buildCanvas(items);
             loading.classList.add('hidden');

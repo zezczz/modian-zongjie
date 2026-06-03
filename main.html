@@ -235,11 +235,8 @@
             "nodes":[
                 {"id":"root00000000000001","type":"text","text":"# 模拟电子技术基础\n\n全11章脉络总览","x":380,"y":200,"width":260,"height":88,"color":"5"},
 
-                {"id":"grp00000000000001","type":"group","x":-680,"y":80,"width":300,"height":500,"color":"1","label":"Ch1 导论 [了解]"},
-                {"id":"ch01topic100001","type":"text","text":"## 信号与频谱\n周期→傅里叶级数\n非周期→傅里叶变换","x":-660,"y":130,"width":260,"height":88},
-                {"id":"ch01topic200002","type":"text","text":"## 线性放大条件 [高频]\n$|A|>1$ 且保持常数\n能量来自外部电源","x":-660,"y":230,"width":260,"height":88,"color":"3"},
-                {"id":"ch01topic300003","type":"text","text":"## 失真分类\n非线性：产生新频率\n线性：幅度/相位失真","x":-660,"y":330,"width":260,"height":88},
-                {"id":"ch01topic400004","type":"text","text":"## 放大电路模型 [高频]\n四种增益 · dB 换算","x":-660,"y":430,"width":260,"height":88},
+                {"id":"grp00000000000001","type":"group","x":-680,"y":80,"width":280,"height":160,"color":"1","label":"Ch1 导论 [了解]"},
+                {"id":"ch01hub","type":"text","detailId":"ch01","text":"## 详细导图 [了解]","x":-660,"y":130,"width":220,"height":56},
 
                 {"id":"grp00000000000002","type":"group","x":-160,"y":20,"width":280,"height":160,"color":"2","label":"Ch2 运算放大器 [必考]"},
                 {"id":"ch02hub","type":"text","detailId":"ch02","text":"## 详细导图 [必考]","x":-140,"y":70,"width":220,"height":56},
@@ -250,11 +247,8 @@
                 {"id":"grp00000000000004","type":"group","x":560,"y":20,"width":320,"height":160,"color":"4","label":"Ch4-5 晶体管 BJT·MOS [必考]"},
                 {"id":"ch45hub","type":"text","detailId":"ch45","text":"## 详细导图 [必考]","x":590,"y":70,"width":220,"height":56},
 
-                {"id":"grp00000000000006","type":"group","x":960,"y":80,"width":300,"height":560,"color":"1","label":"Ch6 频率响应 [重点]"},
-                {"id":"ch06topic100021","type":"text","text":"## RC频率响应 [高频]\n低通 $f_H=\\frac{1}{2\\pi RC}$\n高通 $f_L=\\frac{1}{2\\pi RC}$","x":980,"y":130,"width":260,"height":100},
-                {"id":"ch06topic200022","type":"text","text":"## 密勒效应 [重点]\n$C_M=(1+g_mR_L')C_{gd}$","x":980,"y":250,"width":260,"height":88,"color":"1"},
-                {"id":"ch06topic300023","type":"text","text":"## 增益-带宽积 [高频]\n$|A_{vsM}|\\cdot f_H\\approx$ 常数","x":980,"y":360,"width":260,"height":88},
-                {"id":"ch06topic400024","type":"text","text":"## 频率响应分析 [重点]\n短路/开路时间常数法","x":980,"y":470,"width":260,"height":88},
+                {"id":"grp00000000000006","type":"group","x":960,"y":80,"width":280,"height":160,"color":"1","label":"Ch6 频率响应 [重点]"},
+                {"id":"ch06hub","type":"text","detailId":"ch06","text":"## 详细导图 [重点]","x":980,"y":130,"width":220,"height":56},
 
                 {"id":"grp00000000000007","type":"group","x":340,"y":420,"width":320,"height":160,"color":"2","label":"Ch7-9 差放·功放 [必考]"},
                 {"id":"ch79hub","type":"text","detailId":"ch79","text":"## 详细导图 [必考]","x":370,"y":470,"width":220,"height":56},
@@ -262,16 +256,11 @@
                 {"id":"grp00000000000008","type":"group","x":340,"y":640,"width":280,"height":160,"color":"3","label":"Ch8 反馈 [必考]"},
                 {"id":"ch08hub","type":"text","detailId":"ch08","text":"## 详细导图 [必考]","x":360,"y":690,"width":220,"height":56},
 
-                {"id":"grp00000000000010","type":"group","x":-680,"y":680,"width":300,"height":560,"color":"6","label":"Ch10 信号处理 [重点]"},
-                {"id":"ch10topic100036","type":"text","text":"## 有源滤波 [重点]\nLPF/HPF/BPF · 二阶低通","x":-660,"y":730,"width":260,"height":88},
-                {"id":"ch10topic200037","type":"text","text":"## 正弦波振荡 [必考]\n$|AF|=1$ · RC/LC 振荡","x":-660,"y":840,"width":260,"height":88},
-                {"id":"ch10topic300038","type":"text","text":"## 电压比较器 [高频]\n过零 · 滞回比较器","x":-660,"y":950,"width":260,"height":88},
-                {"id":"ch10topic400039","type":"text","text":"## 非正弦产生 [高频]\n方波 · 三角波","x":-660,"y":1060,"width":260,"height":88},
+                {"id":"grp00000000000010","type":"group","x":-680,"y":300,"width":280,"height":160,"color":"6","label":"Ch10 信号处理 [重点]"},
+                {"id":"ch10hub","type":"text","detailId":"ch10","text":"## 详细导图 [重点]","x":-660,"y":350,"width":220,"height":56},
 
-                {"id":"grp00000000000011","type":"group","x":-680,"y":1300,"width":300,"height":400,"color":"5","label":"Ch11 直流电源 [重点]"},
-                {"id":"ch11topic100040","type":"text","text":"## 整流与滤波 [重点]\n桥式 · 电容/电感滤波","x":-660,"y":1350,"width":260,"height":88},
-                {"id":"ch11topic200041","type":"text","text":"## 线性稳压 [重点]\n$V_O=(1+R_2/R_1)V_{REF}$","x":-660,"y":1460,"width":260,"height":88},
-                {"id":"ch11topic300042","type":"text","text":"## 开关稳压 [高频]\nBuck · Boost","x":-660,"y":1570,"width":260,"height":88}
+                {"id":"grp00000000000011","type":"group","x":-680,"y":520,"width":280,"height":160,"color":"5","label":"Ch11 直流电源 [重点]"},
+                {"id":"ch11hub","type":"text","detailId":"ch11","text":"## 详细导图 [重点]","x":-660,"y":570,"width":220,"height":56}
             ],
             "edges":[
                 {"id":"edge00000000000001","fromNode":"root00000000000001","fromSide":"left","toNode":"grp00000000000001","toSide":"top"},

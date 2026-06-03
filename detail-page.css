@@ -41,3 +41,14 @@ body {
     border-color: rgba(129, 140, 248, 0.6);
     color: #c7d2fe;
 }
+.detail-notes-only header button[onclick^="zoom"],
+.detail-notes-only header button[onclick="fitToView()"] {
+    display: none;
+}
+.detail-notes-only #notes-panel {
+    max-width: 42rem;
+    width: min(100%, 42rem);
+}
+.detail-notes-only #toggle-notes-btn {
+    display: none;
+}
