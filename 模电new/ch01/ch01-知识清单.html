@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第一章 绪论</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第一章 绪论</h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s89900246">1.1 信号</a></li>
+<li><a href="#s83636902">1.2 信号的频谱</a></li>
+<li><a href="#s83042651">1.3 模拟信号和数字信号</a></li>
+<li><a href="#s34448874">1.4 放大电路模型</a></li>
+  <li><a href="#s28206750">电压放大模型 必考</a></li>
+<li><a href="#s41878416">1.5 放大电路的主要性能指标</a></li>
+  <li><a href="#s70914074">输入电阻 重点</a></li>
+  <li><a href="#s65234970">输出电阻 重点</a></li>
+  <li><a href="#s41702660">频率响应 必考</a></li>
+  <li><a href="#s83781132">非线性失真 高频</a></li>
+</ul>
+</div>
+
+<h2 id="s89900246">1.1 信号</h2>
+<p><span class="kp">信号是信息的载体或表达形式</span><span class="exp">——温度传感器输出的电压就是温度信息的载体</span>。</p>
+<p><span class="kp">电信号的电路表示</span>：信号在电路中以电压或电流的形式传输和处理。</p>
+
+<h2 id="s83636902">1.2 信号的频谱</h2>
+<p><strong>动机</strong>：时域波形难以分析电路响应，需要转换到频域。</p>
+<p><span class="kp">正弦信号</span>：最基本的信号形式，任何周期信号都可分解为正弦信号的叠加。</p>
+<p><span class="kp">方波信号的傅里叶级数展开</span>：满足狄里赫利条件的周期信号可展开为傅里叶级数。</p>
+$$v(t) = \frac{4V_m}{\pi} \sum_{n=1,3,5,...}^{\infty} \frac{1}{n} \sin(n\omega_0 t)$$
+<p><span class="exp">这个公式说明方波由奇次谐波分量叠加而成</span>。</p>
+<p><span class="kp">非周期信号的傅里叶变换</span>：将时域信号变换为频域表示。</p>
+$$V(j\omega) = \int_{-\infty}^{\infty} v(t) e^{-j\omega t} dt$$
+<blockquote>易错：实际电路的处理能力是有限的，只能处理一定带宽内的信号。</blockquote>
+
+<h2 id="s83042651">1.3 模拟信号和数字信号</h2>
+<table>
+<tr><th>类型</th><th>时间特性</th><th>幅值特性</th><th>处理电路</th></tr>
+<tr><td><span class="kp">模拟信号</span></td><td>连续</td><td>连续</td><td>模拟电路</td></tr>
+<tr><td><span class="kp">数字信号</span></td><td>离散</td><td>离散</td><td>数字电路</td></tr>
+</table>
+
+<h2 id="s34448874">1.4 放大电路模型</h2>
+<p><strong>动机</strong>：需要将微弱信号放大到足以驱动负载的水平。</p>
+<p><span class="kp">放大电路是一个双口网络</span>：输入端口接收信号，输出端口驱动负载。</p>
+<p><span class="kp">增益形式</span>：</p>
+<table>
+<tr><th>增益类型</th><th>定义</th><th>分贝表示</th></tr>
+<tr><td>电压增益</td><td>$A_v = v_o/v_i$</td><td>$20\lg|A_v|$ dB</td></tr>
+<tr><td>电流增益</td><td>$A_i = i_o/i_i$</td><td>$20\lg|A_i|$ dB</td></tr>
+<tr><td>功率增益</td><td>$A_p = P_o/P_i$</td><td>$10\lg A_p$ dB</td></tr>
+</table>
+
+<h3 id="s28206750">电压放大模型 <span class="tag-must">必考</span></h3>
+<p><span class="kp">输入回路</span>：信号源内阻 $R_s$ 与放大电路输入电阻 $R_i$ 分压。</p>
+$$v_i = \frac{R_i}{R_s + R_i} v_s$$
+<p><span class="kp">输出回路</span>：受控电压源 $A_{vo}v_i$ 与输出电阻 $R_o$、负载 $R_L$ 串联。</p>
+$$v_o = \frac{R_L}{R_o + R_L} A_{vo} v_i$$
+<p><span class="exp">要想减小负载对增益的影响，需要 $R_o \ll R_L$；要想减小信号源内阻的影响，需要 $R_i \gg R_s$</span>。</p>
+
+<h2 id="s41878416">1.5 放大电路的主要性能指标</h2>
+<h3 id="s70914074">输入电阻 <span class="tag-key">重点</span></h3>
+<p><span class="kp">$R_i = v_i/i_i$</span>：反映放大电路对信号源的负载效应。$R_i$ 越大，对信号源的负载越小。</p>
+
+<h3 id="s65234970">输出电阻 <span class="tag-key">重点</span></h3>
+<p><span class="kp">$R_o$</span>：反映放大电路带负载的能力。$R_o$ 越小，带负载能力越强。</p>
+<blockquote>易错：输入、输出电阻是交流电阻，计算时需将独立源置零。</blockquote>
+
+<h3 id="s41702660">频率响应 <span class="tag-must">必考</span></h3>
+<p><span class="kp">频率响应</span>：输出随输入信号频率连续变化的稳态响应。</p>
+<p><span class="kp">幅度失真</span>：放大电路对不同频率分量的放大倍数不同。</p>
+<p><span class="kp">相位失真</span>：放大电路对不同频率分量产生的时延不同。</p>
+<p><span class="kp">频率失真（线性失真）</span>：幅度失真和相位失真的统称。</p>
+
+<h3 id="s83781132">非线性失真 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">非线性失真</span>：由元器件非线性特性引起的失真。</p>
+$$\gamma = \frac{\sqrt{V_{o2}^2 + V_{o3}^2 + ...}}{V_{o1}} \times 100\%$$
+<p><span class="exp">$\gamma$ 为非线性失真系数，$V_{o1}$ 是基波分量有效值，$V_{ok}$ 是高次谐波分量有效值</span>。</p>
+
+
+
+</body>
+</html>

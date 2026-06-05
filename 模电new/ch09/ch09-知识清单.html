@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第九章 功率放大电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第九章 功率放大电路</h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s85321242">9.1 功率放大电路的一般问题</a></li>
+  <li><a href="#s20306205">工作状态分类 必考</a></li>
+<li><a href="#s25332705">9.2 射极输出器——甲类放大的实例</a></li>
+<li><a href="#s49390083">9.3 乙类双电源互补对称功率放大电路</a></li>
+  <li><a href="#s51350888">电路组成 必考</a></li>
+  <li><a href="#s89597942">分析计算 必考</a></li>
+  <li><a href="#s50310113">交越失真 重点</a></li>
+<li><a href="#s43333837">9.4 甲乙类互补对称功率放大电路</a></li>
+  <li><a href="#s60837256">OTL电路 高频</a></li>
+<li><a href="#s30287348">9.5 丁类（D类）功率放大电路</a></li>
+</ul>
+</div>
+
+<h2 id="s85321242">9.1 功率放大电路的一般问题</h2>
+<p><strong>动机</strong>：需要将信号功率放大到足以驱动负载（如扬声器、电机）。</p>
+<p><span class="kp">功率放大电路</span>：以输出较大功率为目的的放大电路，三极管工作在接近极限状态。</p>
+
+<h3 id="s20306205">工作状态分类 <span class="tag-must">必考</span></h3>
+<table>
+<tr><th>状态</th><th>导通角</th><th>效率</th><th>特点</th></tr>
+<tr><td>甲类</td><td>360°</td><td>≤25%</td><td>失真小，效率低</td></tr>
+<tr><td>乙类</td><td>180°</td><td>≤78.5%</td><td>效率高，有交越失真</td></tr>
+<tr><td>甲乙类</td><td>180°~360°</td><td>介于甲乙之间</td><td>折中方案</td></tr>
+</table>
+
+<h2 id="s25332705">9.2 射极输出器——甲类放大的实例</h2>
+<p><span class="exp">甲类放大：一个周期内三极管均导通，效率低（≤25%），但失真小。</span></p>
+
+<h2 id="s49390083">9.3 乙类双电源互补对称功率放大电路</h2>
+<h3 id="s51350888">电路组成 <span class="tag-must">必考</span></h3>
+<p><span class="kp">OCL电路</span>：NPN和PNP管互补对称，双电源供电，输出直接耦合负载。</p>
+<p><span class="kp">工作原理</span>：正半周T1导通，负半周T2导通，两管轮流工作。</p>
+
+<h3 id="s89597942">分析计算 <span class="tag-must">必考</span></h3>
+<p><span class="kp">最大输出功率</span>：</p>
+$$P_{om} = \frac{V_{CC}^2}{2R_L}$$
+<p><span class="kp">直流电源供给功率</span>：</p>
+$$P_V = \frac{2V_{CC}V_{om}}{\pi R_L}$$
+<p><span class="kp">效率</span>：</p>
+$$\eta = \frac{P_o}{P_V} = \frac{\pi V_{om}}{4V_{CC}}$$
+<p><span class="exp">最大效率 $\eta_{max} = \pi/4 \approx 78.5\%$（当 $V_{om} = V_{CC}$ 时）</span></p>
+
+<h3 id="s50310113">交越失真 <span class="tag-key">重点</span></h3>
+<p><span class="kp">交越失真</span>：乙类互补电路在输入信号过零附近，两管都截止，输出波形出现失真。</p>
+<p><span class="exp">消除方法：采用甲乙类，给两管加适当的静态偏置，使其微导通。</span></p>
+
+<h2 id="s43333837">9.4 甲乙类互补对称功率放大电路</h2>
+<p><span class="kp">偏置方法</span>：用二极管或 $V_{BE}$ 扩大电路提供偏置。</p>
+<p><span class="exp">甲乙类电路的 $P_o$、$P_V$、$P_T$ 仍按乙类公式估算。</span></p>
+
+<h3 id="s60837256">OTL电路 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">OTL电路</span>：单电源互补对称电路，输出通过大电容耦合负载。</p>
+<p><span class="exp">计算时用 $V_{CC}/2$ 取代双电源电路中的 $V_{CC}$。</span></p>
+
+<h2 id="s30287348">9.5 丁类（D类）功率放大电路</h2>
+<p><span class="kp">D类放大</span>：MOS管工作于开关状态，功耗几乎为零，效率极高。</p>
+<p><span class="exp">通过脉宽调制（PWM）实现信号放大。</span></p>
+
+
+
+</body>
+</html>

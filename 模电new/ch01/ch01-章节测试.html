@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第一章 绪论</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第一章 绪论</h1>
+<h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">本测试共28题，满分100分，建议用时30分钟</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+
+<script>
+var Q = [{"type": "choice", "points": 2, "question": "信号是什么的载体或表达形式？", "options": ["能量", "信息", "电流", "电压"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：信号是信息的载体或表达形式，例如温度传感器输出的电压就是温度信息的载体。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "模拟信号的特点是？", "options": ["时间和幅值都连续", "时间和幅值都离散", "时间连续幅值离散", "时间离散幅值连续"], "answer": 0, "explanation": "<strong>正确答案</strong>：A。<br><br><strong>解析</strong>：模拟信号在时间和幅值上都是连续的，而数字信号在时间和幅值上都是离散的。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "电压增益的分贝表示为？", "options": ["$10\\lg|A_v|$ dB", "$20\\lg|A_v|$ dB", "$\\lg|A_v|$ dB", "$40\\lg|A_v|$ dB"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：电压增益的分贝表示为 $20\\lg|A_v|$ dB，电流增益也是 $20\\lg|A_i|$ dB，但功率增益是 $10\\lg A_p$ dB。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "要减小负载对电压增益的影响，应该？", "options": ["增大 $R_o$", "减小 $R_o$", "增大 $R_i$", "减小 $R_i$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：在电压放大模型中，$v_o = \\frac{R_L}{R_o + R_L} A_{vo} v_i$，要减小负载影响需要 $R_o \\ll R_L$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "放大电路的输入电阻是？", "options": ["直流电阻", "交流电阻", "静态电阻", "等效电阻"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：输入电阻和输出电阻都是交流电阻，计算时需将独立源置零。", "pitfall": "易错点：输入输出电阻不是直流电阻，不能用万用表直接测量。"}, {"type": "choice", "points": 2, "question": "频率失真是指？", "options": ["非线性失真", "幅度失真和相位失真的统称", "只有幅度失真", "只有相位失真"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：频率失真也称为线性失真，是幅度失真和相位失真的统称。非线性失真是另一类失真。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "功率增益的分贝表示为？", "options": ["$20\\lg A_p$ dB", "$10\\lg A_p$ dB", "$\\lg A_p$ dB", "$40\\lg A_p$ dB"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：功率增益的分贝表示为 $10\\lg A_p$ dB，注意与电压/电流增益的 $20\\lg$ 不同。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "放大电路是一个什么网络？", "options": ["单口网络", "双口网络", "三口网络", "四口网络"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：放大电路是一个双口网络，输入端口接收信号，输出端口驱动负载。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "非线性失真系数的计算公式中，分母是？", "options": ["总输出电压", "基波分量有效值", "直流分量", "谐波分量"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：非线性失真系数 $\\gamma = \\frac{\\sqrt{V_{o2}^2 + V_{o3}^2 + ...}}{V_{o1}} \\times 100\\%$，分母是基波分量有效值 $V_{o1}$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "电压放大模型中，输出回路的受控源是？", "options": ["电流控制电压源", "电压控制电压源", "电流控制电流源", "电压控制电流源"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：电压放大模型中，输出回路的受控源是电压控制电压源（VCVS），$A_{vo}v_i$。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "方波信号可以分解为奇次谐波分量的叠加。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：方波信号的傅里叶级数展开式中只包含奇次谐波分量（1, 3, 5, ...次谐波）。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "输入电阻越大，对信号源的负载效应越大。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：输入电阻越大，对信号源的负载越小。$R_i$ 越大，从信号源汲取的电流越小。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "相位失真是指放大电路对不同频率分量产生的时延不同。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：相位失真是指放大电路对不同频率分量产生的时延不同，导致复合波形失真。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "电压增益和电流增益的分贝计算公式相同。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：电压增益和电流增益的分贝计算公式都是 $20\\lg$，只有功率增益是 $10\\lg$。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "放大电路的输出电阻越大，带负载能力越强。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：输出电阻越小，带负载能力越强。$R_o$ 越小，负载变化对输出电压的影响越小。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "周期信号的傅里叶变换是离散频谱。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：周期信号的傅里叶级数展开得到离散频谱，非周期信号的傅里叶变换得到连续频谱。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "电压放大模型中，信号源内阻会导致输入信号衰减。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：在输入回路中，$v_i = \\frac{R_i}{R_s + R_i} v_s$，信号源内阻 $R_s$ 会分压，导致输入信号衰减。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "模拟信号在时间和幅值上都是离散的。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：模拟信号在时间和幅值上都是连续的，数字信号才是离散的。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "放大电路的输入电阻是交流电阻。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：输入电阻和输出电阻都是交流电阻，计算时需将独立源置零。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "非线性失真是由放大电路的频率特性引起的。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：非线性失真是由元器件的非线性特性引起的，频率特性引起的是线性失真（频率失真）。", "pitfall": ""}, {"type": "short", "points": 6, "question": "简述电压放大模型的输入回路和输出回路的工作原理。", "options": [], "answer": "输入回路：信号源内阻 $R_s$ 与放大电路输入电阻 $R_i$ 分压，$v_i = \\frac{R_i}{R_s + R_i} v_s$。要减小信号源内阻的影响，需要 $R_i \\gg R_s$。输出回路：受控电压源 $A_{vo}v_i$ 与输出电阻 $R_o$、负载 $R_L$ 串联，$v_o = \\frac{R_L}{R_o + R_L} A_{vo} v_i$。要减小负载对增益的影响，需要 $R_o \\ll R_L$。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "什么是频率失真？它包括哪两种失真？", "options": [], "answer": "频率失真（线性失真）是指放大电路对信号中不同频率分量的放大倍数不同或时延不同而产生的失真。它包括：1. 幅度失真：放大电路对不同频率分量的放大倍数不同；2. 相位失真：放大电路对不同频率分量产生的时延不同。这两种失真通常同时发生。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "画出四种基本放大电路模型（电压、电流、互阻、互导），并说明各自的特点。", "options": [], "answer": "1. 电压放大模型：输入端口等效为 $R_i$，输出端口为 VCVS；2. 电流放大模型：输入端口等效为 $R_i$，输出端口为 CCCS；3. 互阻放大模型：输入端口等效为 $R_i$，输出端口为 CCVS；4. 互导放大模型：输入端口等效为 $R_i$，输出端口为 VCCS。电压放大模型要求 $R_i \\gg R_s$ 且 $R_o \\ll R_L$。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释非线性失真系数的含义和计算公式。", "options": [], "answer": "非线性失真系数 $\\gamma$ 衡量放大电路的非线性失真程度。计算公式：$\\gamma = \\frac{\\sqrt{V_{o2}^2 + V_{o3}^2 + ...}}{V_{o1}} \\times 100\\%$，其中 $V_{o1}$ 是基波分量有效值，$V_{ok}$ 是第 k 次谐波分量有效值。$\\gamma$ 越小，非线性失真越小。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "试分析信号源内阻和负载电阻对放大电路电压增益的影响，并说明如何设计放大电路以减小这些影响。", "options": [], "answer": "在电压放大模型中，信号源内阻 $R_s$ 与输入电阻 $R_i$ 分压，使实际加到放大电路输入端的电压 $v_i$ 小于信号源电压 $v_s$。负载电阻 $R_L$ 与输出电阻 $R_o$ 分压，使实际输出电压 $v_o$ 小于开环输出电压。要减小这些影响，设计时应使 $R_i \\gg R_s$（增大输入电阻）和 $R_o \\ll R_L$（减小输出电阻）。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "比较幅度失真和相位失真的异同，并举例说明在什么情况下会产生频率失真。", "options": [], "answer": "相同点：都是由于放大电路对不同频率分量的处理能力不同而产生的线性失真。不同点：幅度失真是放大倍数随频率变化导致各频率分量幅度比例改变；相位失真是时延随频率变化导致各频率分量相位关系改变。例如：当方波信号通过低通滤波器时，高频谐波被衰减产生幅度失真；当信号通过传输线时，不同频率的传播速度不同产生相位失真。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 10, "question": "设计一个完整的电压放大电路，需要考虑哪些主要性能指标？如何通过电路设计来优化这些指标？请结合实例说明。", "options": [], "answer": "主要性能指标包括：1. 电压增益：通过选择合适的放大器件和偏置电路来保证；2. 输入电阻：通过选择合适的输入级电路（如射极跟随器）来提高；3. 输出电阻：通过选择合适的输出级电路（如互补对称电路）来降低；4. 频率响应：通过频率补偿技术来扩展带宽；5. 非线性失真：通过负反馈技术来减小。实例：设计一个音频放大电路，需要 $R_i > 10k\\Omega$（减小对信号源的负载），$R_o < 100\\Omega$（提高带负载能力），带宽 20Hz-20kHz（覆盖音频范围），非线性失真系数 < 1%。", "explanation": "", "pitfall": ""}, {"type": "comprehensive", "points": 20, "question": "某电压放大电路的参数为：$A_{vo}=100$，$R_i=10k\\Omega$，$R_o=1k\\Omega$。信号源内阻 $R_s=500\\Omega$，负载电阻 $R_L=2k\\Omega$，信号源电压 $v_s=10mV$。(1)画出等效电路；(2)计算输入电压 $v_i$；(3)计算输出电压 $v_o$；(4)计算电压增益 $A_v=v_o/v_i$；(5)计算源电压增益 $A_{vs}=v_o/v_s$；(6)分析如何提高源电压增益。", "options": [], "answer": "(1) 等效电路：信号源 $v_s$ 串联 $R_s$，接放大电路输入端 $R_i$，输出端为 $A_{vo}v_i$ 串联 $R_o$，接负载 $R_L$。(2) $v_i = \\frac{R_i}{R_s+R_i}v_s = \\frac{10k}{0.5k+10k} \\times 10mV = 9.52mV$。(3) $v_o = \\frac{R_L}{R_o+R_L}A_{vo}v_i = \\frac{2k}{1k+2k} \\times 100 \\times 9.52mV = 634.7mV$。(4) $A_v = v_o/v_i = 634.7mV/9.52mV = 66.7$。(5) $A_{vs} = v_o/v_s = 634.7mV/10mV = 63.5$。(6) 提高源电压增益的方法：增大 $R_i$（使 $R_i \\gg R_s$）可使 $v_i$ 接近 $v_s$；减小 $R_o$（使 $R_o \\ll R_L$）可使输出电压接近 $A_{vo}v_i$。", "explanation": "", "pitfall": ""}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "tf": "二、判断题", "short": "三、简答题", "essay": "四、问答题", "comprehensive": "五、综合题"}, "section_order": ["choice", "tf", "short", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+
+function build(){
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var s = q.type;
+    if (s !== sec) {
+      sec = s;
+      if (titles[s]) {
+        h += '<h3>' + titles[s] + '</h3>';
+      }
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i+1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+    h += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65+j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + q.explanation + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+
+  // Re-render MathJax for dynamically inserted formulas
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('selected');
+  }
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) {
+    target.classList.add('selected');
+  }
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      if (radio && parseInt(radio.value) === q.answer) {
+        score += q.points;
+        card.classList.add('correct');
+        badge.className = 'badge badge-ok';
+        badge.textContent = LABELS.correct_label;
+        correctEl.innerHTML = '';
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong');
+        badge.className = 'badge badge-no';
+        badge.textContent = LABELS.wrong_label;
+        var ansText = q.type === 'choice'
+          ? String.fromCharCode(65+q.answer) + '. ' + (q.options ? q.options[q.answer] : '')
+          : (q.answer === 0 ? LABELS.true_label : LABELS.false_label);
+        correctEl.innerHTML = LABELS.answer_prefix + ansText;
+        if (radio) {
+          var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+          if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+        }
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      }
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) tas[i].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = LABELS.graded_label;
+  }
+
+  // Re-render MathJax for revealed explanations
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+</script>
+</body>
+</html>

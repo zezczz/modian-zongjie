@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第二章 运算放大器</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第二章 运算放大器</h1>
+<h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">本测试共28题，满分100分，建议用时30分钟</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+
+<script>
+var Q = [{"type": "choice", "points": 2, "question": "理想运算放大器的开环电压增益为？", "options": ["有限值", "0", "$\\to \\infty$", "1"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：理想运放的开环电压增益 $A_{vo} \\to \\infty$，这是虚短成立的前提条件。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "虚短的含义是？", "options": ["输入端短路", "$v_P = v_N$", "输出端短路", "输入端开路"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：虚短是指 $v_P \\approx v_N$，因为 $A_{vo} \\to \\infty$，要使输出有限，输入差值必须趋近于零。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "同相放大电路的电压增益为？", "options": ["$-R_f/R_1$", "$R_f/R_1$", "$1 + R_2/R_1$", "$1 - R_2/R_1$"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：同相放大电路的电压增益 $A_v = 1 + R_2/R_1$，始终大于等于1。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "反相放大电路的输入电阻等于？", "options": ["$\\infty$", "$R_f$", "$R_1$", "$R_1 // R_f$"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：反相放大电路的输入电阻 $R_i = R_1$，这是因为反相端是虚地，信号电流全部流过 $R_1$。", "pitfall": "易错点：很多人误以为运放输入电阻无穷大，所以反相放大电路输入电阻也是无穷大。实际上反相端是虚地，输入电阻等于 $R_1$。"}, {"type": "choice", "points": 2, "question": "电压跟随器的电压增益为？", "options": ["0", "1", "$-1$", "$\\infty$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：电压跟随器是同相放大电路的特例（$R_1 = \\infty$ 或 $R_2 = 0$），电压增益 $A_v = 1$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "反相加法电路的输出电压为？", "options": ["$v_O = R_f/R_1 \\cdot v_1 + R_f/R_2 \\cdot v_2$", "$v_O = -(R_f/R_1 \\cdot v_1 + R_f/R_2 \\cdot v_2)$", "$v_O = v_1 + v_2$", "$v_O = -(v_1 + v_2)$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：反相加法电路的输出 $v_O = -(\\frac{R_f}{R_1}v_1 + \\frac{R_f}{R_2}v_2)$，负号表示反相。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "虚断的含义是？", "options": ["输入端短路", "输出端开路", "$i_P = i_N = 0$", "$v_P = v_N$"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：虚断是指输入端电流趋近于零，因为理想运放的输入电阻 $r_i \\to \\infty$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "同相放大电路和反相放大电路的共同特点是？", "options": ["输入电阻都无穷大", "输出电阻都趋近于零", "都有虚地", "电压增益都大于1"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：由于负反馈的作用，同相和反相放大电路的输出电阻都趋近于零，具有很强的带负载能力。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "仪用放大器的主要特点是？", "options": ["低输入电阻", "高共模抑制比", "低增益", "单端输入"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：仪用放大器的特点是高输入电阻、高共模抑制比、高增益精度，用于放大微小差模信号。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "积分电路的输出电压与输入电压的关系是？", "options": ["$v_O = -RC dv_i/dt$", "$v_O = -(1/RC)\\int v_i dt$", "$v_O = -R_f/R_1 \\cdot v_i$", "$v_O = v_i$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：积分电路的输出 $v_O = -\\frac{1}{RC}\\int v_i dt$，输出是输入的积分。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "理想运算放大器的输入电阻为无穷大。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：理想运放的输入电阻 $r_i \\to \\infty$，这是虚断成立的前提条件。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "虚短意味着输入端真正短路了。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：虚短是指 $v_P \\approx v_N$，不是真正的短路。实际上输入端之间有很高的电阻，只是电压差趋近于零。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "同相放大电路的电压增益可以小于1。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：同相放大电路的电压增益 $A_v = 1 + R_2/R_1 \\geq 1$，不可能小于1。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "反相放大电路的反相端是虚地。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：反相放大电路中，同相端接地，由虚短可知 $v_N = v_P = 0$，所以反相端是虚地。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "运放的输出电阻趋近于零意味着带负载能力很强。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：输出电阻越小，负载变化对输出电压的影响越小，带负载能力越强。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "电压跟随器可以用于阻抗变换。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：电压跟随器输入电阻无穷大、输出电阻趋近于零，可以实现阻抗变换，起到隔离缓冲作用。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "同相放大电路存在共模输入信号。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：同相放大电路中，输入信号同时加在两个输入端，存在共模输入信号。反相放大电路的反相端是虚地，不存在共模输入。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "积分电路的输出电压与输入电压成正比。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：积分电路的输出电压是输入电压的积分，不是简单的正比关系。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "反相放大电路的电压增益为负值表示输出与输入反相。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：反相放大电路的电压增益 $A_v = -R_f/R_1$，负号表示输出与输入反相。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "理想运放的输出电阻为零。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：理想运放的输出电阻 $r_o = 0$，这意味着输出电压不受负载影响。", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释虚短和虚断的物理意义，并说明它们在电路分析中的作用。", "options": [], "answer": "虚短：$v_P \\approx v_N$，因为 $A_{vo} \\to \\infty$，要使输出有限，输入差值必须趋近于零。虚断：$i_P = i_N = 0$，因为 $r_i \\to \\infty$，输入端无电流。作用：虚短提供输入端电压关系，虚断提供输入端电流关系，两者结合可以列出节点方程，求解电路。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "比较同相放大电路和反相放大电路的优缺点。", "options": [], "answer": "同相放大电路优点：输入电阻无穷大，对信号源无负载；缺点：存在共模输入信号，对运放共模抑制比要求高。反相放大电路优点：无共模输入信号；缺点：输入电阻等于 $R_1$，对信号源有负载。两者共同优点：输出电阻趋近于零，带负载能力强。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "为什么电压跟随器具有阻抗变换作用？", "options": [], "answer": "电压跟随器是同相放大电路的特例（$A_v = 1$），具有输入电阻无穷大、输出电阻趋近于零的特点。它可以使高阻抗信号源与低阻抗负载匹配，起到隔离缓冲作用。例如：信号源输出电阻很高，直接接低阻抗负载会导致信号衰减，通过电压跟随器可以解决这个问题。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "画出反相加法电路，并推导其输出电压公式。", "options": [], "answer": "反相加法电路：两个输入信号 $v_1$、$v_2$ 分别通过 $R_1$、$R_2$ 接到反相端，反馈电阻 $R_f$ 接在输出端和反相端之间，同相端接地。由虚短 $v_N = 0$，虚断列 KCL：$v_1/R_1 + v_2/R_2 + v_O/R_f = 0$，解得 $v_O = -(R_f/R_1 \\cdot v_1 + R_f/R_2 \\cdot v_2)$。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "试分析同相放大电路和反相放大电路在输入电阻、共模抑制比、增益精度等方面的差异，并说明各自的适用场合。", "options": [], "answer": "输入电阻：同相放大电路输入电阻无穷大，反相放大电路输入电阻等于 $R_1$。共模抑制比：同相放大电路存在共模输入信号，对运放 CMRR 要求高；反相放大电路无共模输入。增益精度：两者都取决于外接电阻的精度。适用场合：同相放大电路适用于高阻抗信号源、需要阻抗匹配的场合；反相放大电路适用于需要精确增益、无共模干扰的场合。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "解释为什么运放线性应用电路必须引入负反馈，并举例说明负反馈对电路性能的影响。", "options": [], "answer": "运放开环增益极高（$>10^5$），微小的输入差值就会使输出饱和，无法实现线性放大。引入负反馈后，输出通过反馈网络送回输入端，与输入信号相减，使净输入信号减小，从而稳定增益。例如：同相放大电路中，$A_v = 1 + R_2/R_1$，增益只取决于外接电阻，与运放参数无关。负反馈还可以提高增益稳定性、减小非线性失真、扩展带宽。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 10, "question": "设计一个增益为10的放大电路，要求输入电阻大于1MΩ。选择合适的电路结构，画出电路图，计算元件参数，并分析电路性能。", "options": [], "answer": "选择同相放大电路，因为其输入电阻无穷大，满足要求。电路：信号接同相端，$R_1 = 10k\\Omega$，$R_2 = 90k\\Omega$ 接在反相端和输出端之间。增益 $A_v = 1 + R_2/R_1 = 1 + 90/10 = 10$。输入电阻 $>1M\\Omega$，输出电阻 $\\to 0$。若信号源内阻 $R_s = 500\\Omega$，则 $v_i \\approx v_s$，源电压增益 $A_{vs} \\approx 10$。", "explanation": "", "pitfall": ""}, {"type": "comprehensive", "points": 20, "question": "某反相放大电路如图所示：$R_1 = 10k\\Omega$，$R_f = 100k\\Omega$，$R_2 = R_1 // R_f$，运放为理想运放。(1)计算电压增益；(2)计算输入电阻；(3)若输入信号 $v_i = 0.1\\sin\\omega t$ V，求输出电压；(4)若信号源内阻 $R_s = 1k\\Omega$，求源电压增益；(5)分析电阻 $R_2$ 的作用。", "options": [], "answer": "(1) $A_v = -R_f/R_1 = -100/10 = -10$。(2) $R_i = R_1 = 10k\\Omega$。(3) $v_o = A_v \\cdot v_i = -10 \\times 0.1\\sin\\omega t = -\\sin\\omega t$ V。(4) 信号源内阻 $R_s$ 与 $R_i$ 分压，$v_i = \\frac{R_i}{R_s+R_i}v_s = \\frac{10k}{1k+10k}v_s = 0.909v_s$，$A_{vs} = A_v \\times 0.909 = -9.09$。(5) $R_2$ 是输入端平衡电阻，用于消除偏置电流引起的误差。当 $R_2 = R_1 // R_f$ 时，两输入端对地的直流电阻相等，偏置电流在两端产生的压降相等，被虚短消除。", "explanation": "", "pitfall": ""}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "tf": "二、判断题", "short": "三、简答题", "essay": "四、问答题", "comprehensive": "五、综合题"}, "section_order": ["choice", "tf", "short", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+
+function build(){
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var s = q.type;
+    if (s !== sec) {
+      sec = s;
+      if (titles[s]) {
+        h += '<h3>' + titles[s] + '</h3>';
+      }
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i+1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+    h += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65+j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + q.explanation + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+
+  // Re-render MathJax for dynamically inserted formulas
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('selected');
+  }
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) {
+    target.classList.add('selected');
+  }
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      if (radio && parseInt(radio.value) === q.answer) {
+        score += q.points;
+        card.classList.add('correct');
+        badge.className = 'badge badge-ok';
+        badge.textContent = LABELS.correct_label;
+        correctEl.innerHTML = '';
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong');
+        badge.className = 'badge badge-no';
+        badge.textContent = LABELS.wrong_label;
+        var ansText = q.type === 'choice'
+          ? String.fromCharCode(65+q.answer) + '. ' + (q.options ? q.options[q.answer] : '')
+          : (q.answer === 0 ? LABELS.true_label : LABELS.false_label);
+        correctEl.innerHTML = LABELS.answer_prefix + ansText;
+        if (radio) {
+          var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+          if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+        }
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      }
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) tas[i].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = LABELS.graded_label;
+  }
+
+  // Re-render MathJax for revealed explanations
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+</script>
+</body>
+</html>

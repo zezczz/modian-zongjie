@@ -1,0 +1,48 @@
+11   直流电源电路 如何为放大电路提供直流工作电源？ 干电池 可充电电池（锂电池、镍氢电池、其它蓄电池） 太阳能电池 电网电源？ style.visibility style.visibility style.visibility style.visibility
+11.1   小功率整流滤波电路 2.  滤波电路 电容滤波的特点 A.  二极管的导电角     <   ， 流过二极管的瞬时电流很大 。选择二极管的整流电流应满足： C.  负载直流平均电压  V L   升高  d  =   R L C   越大，  V L   越高 B.  C 与 R L 并联作为变压器 的负载，阻抗变小，所以变压器二次绕组电流的有效值应满足： I 2 =(1.5~2) I L   I D =(2~3) I L   style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+11.1   小功率整流滤波电路 2.  滤波电路 电容滤波的特点 D.  直流电压  V L   随负载 电 流 增加而减少 当   d   （ 3  5 ）   时， V L  = ( 1.1  1.2 ) V 2 E.  输出文波电压 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+11.1   小功率整流滤波电路 2.  滤波电路 电感滤波电路  特点：         整流二极管的导电角增大，没有峰值电流，输出特性变得平滑。 缺点：          由于电感存在铁芯，体积大，笨重且容易引起电磁干扰。一般只适用于小电压、大电流的场合。 style.visibility style.visibility style.visibility style.visibility style.visibility
+11.1   小功率整流滤波电路 11.2    线性稳压电路 11.3    开关稳压电路 11   直流电源电路
+11.2 . 1    线性 串联反馈式稳压电路 1.  输出电压固定的稳压电路 (+) (+) (+) (+) (+) 电压串联负反馈 将 V REF 看作电路的输入 可以稳定输出电压 输出 电压变化 输入电压波动 负载电流变化 稳压原理 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+所以输出电压 满足深度负反馈，根据 虚短 和 虚断 有 #  除了稳压原理来自负反馈，此电路设计还需要考虑哪些问题 ? 11.2 . 1    线性 串联反馈式稳压电路 1.  输出电压固定的稳压电路 对基准电压 V REF 的稳定性要求很高 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+输出电压 电阻参数设计满足  I abj <<    I 1  时 有 11.2 . 1    线性 串联反馈式稳压电路 2.  输出电压可调的稳压电路 外接电阻 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+11.2 . 1    线性 串联反馈式稳压电路 2.  输出电压可调的稳压电路 R P k 在 0~1 之间取值，   R P 动端调制底部时 k  = 0
+3.  低 压差 稳压电路（ LDO ） 11.2 . 1    线性 串联反馈式稳压电路 style.visibility style.visibility style.visibility style.visibility style.visibility
+3.  低 压差 稳压电路（ LDO ） 11.2 . 1    线性 串联反馈式稳压电路 PMOS 管 仍然是电压串联负反馈 (+) (-) (+) (+) (+) style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+11   直流电源电路 电网电源如何变为直流供电电源？ 变压器： 整流： 滤波： 稳压： 降压 滤除脉动 交流变脉动直流 进一步消除纹波，提高电压的稳定性和带载能力 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+3.  低 压差 稳压电路（ LDO ） | V DS | 可以很小          即使 MOS 管工作在可变电阻区，负反馈仍然有效 。          如，当 V O 设计为 2.5V 时，输入电压 V I 可以低至 3.3V ，甚至更低 。         LDO 比普通线性稳压电路工作效率更高。低电压情况下，   LDO 更具优势 。 11.2 . 1    线性 串联反馈式稳压电路 style.visibility style.visibility style.visibility style.visibility
+78  XX ： 正电压               79  XX ：负电压  11.2.2    线性 集成稳压器及其应用举例 1.  集成稳压器 简介 输出电压 固定 的线性三端集成稳压器 style.visibility style.visibility style.visibility style.visibility style.visibility
+11.2.2    线性 集成稳压器及其应用举例 1.  集成稳压器 简介 输出 电压 可 调 的 线性集成三端稳压器 如 LM317 ： 正电压               LM337 ： 负电压  style.visibility
+11.2.2    线性 集成稳压器及其应用举例
+典型应用电路  保护二极管 11.2.2    线性 集成稳压器及其应用举例 2.  应用 举例 #  为什么要两个电容并联 ? style.visibility style.visibility style.visibility
+典型应用电路  11.2.2    线性 集成稳压器及其应用举例 2.  应用 举例
+典型应用电路  11.2.2    线性 集成稳压器及其应用举例 2.  应用 举例
+典型应用电路  11.2.2    线性 集成稳压器及其应用举例 2.  应用 举例
+典型应用电路  11.2.2    线性 集成稳压器及其应用举例 2.  应用 举例 在输出  200mA  电流时输入输出 压差 最小值 为  0.1V TPS79901 输出电压： V O =[( R 1 + R 2 )/ R 2 ] × 1.193 可调范围 ： 1.2~6.4V 固定 输出 ： 如 TPS79915 、  TPS79918 、 TPS79925 、 TPS79933 等固定 输出 电压 分别 为 1.5V 、 1.8V 、 2.5V 和 3.3V 。 关断使能 控制 端 style.visibility style.visibility
+11.1   小功率整流滤波电路 11.2    线性稳压电路 11.3    开关稳压电路 11   直流电源电路
+11   直流电源电路 电网电源如何变为直流供电电源？ 线性电源 开关电源 style.visibility style.visibility
+11.3    开关稳压电路 （ 1 ）效率高         在开关稳压电源中，调整管工作于开关状态，通过控制调整管的导通时间实现稳压。         由于调整管工作于开关状态，管耗很小，电源效率明显提高，可达 75 ％～ 95 ％。 特点 style.visibility style.visibility style.visibility
+11.3    开关稳压电路 特点 （ 2 ）体积小，重量轻          开关稳压电源省去了笨重的工频变压器和线性稳压中调整管的散热装置，所以相对于线性稳压电源，其体积更小，重量更轻。
+11.3    开关稳压电路 特点 （ 3 ）稳压范围宽          开关稳压电路的 效率与输入 电压的大小基本无关，对交流电网的要求不高，因此稳压范围较宽。 （ 4 ）调整 管（开关管）的 控制比较复杂           由于开关稳压电路的调整管工作在截止和饱和两种状态，控制电路较为复杂。 （ 5 ）输出电压纹波较大 style.visibility style.visibility style.visibility
+11.3.1    无 变压器的开关稳压电路 开关 DC/DC 变换器基本 电路 反馈控制实现稳压 DC DC DC/DC 稳压器或变换器 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+11.3.1    无 变压器的开关稳压电路 1.  开关 DC/DC 变换器基本电路 串联 型 ( 降压型或 Buck 型 ) v G = 高电平 ： T 导通 ， D 截止 ， L 充电 ， i L 开始增加 ，增大 到一定程度时 C 由放电转为充电， V O 开始上升 。 v G = 低电平 ： T 截止， L 放电， D 导通。由于 i L 不能突变 ， 所以 i O 无突变， V O 也 无 突变。随着 L 的放电， i L 逐渐减小， C 由充电逐渐变为放电， V O 开始下降。 T 工作在 开关状态 下，如何输出 直流电压 ？ style.visibility style.visibility style.visibility style.visibility style.visibility
+11.3.1    无 变压器的开关稳压电路 串联 型 ( 降压型或 Buck 型 ) 依据一个周期内电感电压的平均值为零 的 伏秒平衡 原理 ， 有 ( V I - V O )    t on =   V O    t off V O 与占空比成比例 T 与负载 R L 串联 V O 总是小于 V I q ＝ t on / T  称为脉冲波形的占空比 1.  开关 DC/DC 变换器基本电路 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+11.3.1    无 变压器的开关稳压电路 并联 型 ( 升压型或 Boost 型 ) v G 为高电平时 T 导 通 ， D 截止   v L ≈ V I v G 为低电平时 T 截止 ， D 导通   V O ≈  v X = V I + v L 显然   V O > V I 升压型 T 与负载 R L 并联 改变占空比可以改变输出电压 1.  开关 DC/DC 变换器基本电路 V O style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+11.3.1    无 变压器的开关稳压电路 极性反转 型 v G 为高电平时 T 导 通 ， D 截止， L 充电 v G 为低电平时 T 截止 ， D 导 通 ， L 放电 V O 极性与 V I 相反 1.  开关 DC/DC 变换器基本电路 i L i L style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+串联型（降压， Buck ） 2.  稳压原理 11.3.1    无 变压器的开关稳压电路 脉宽调制 （ PWM ）波形产生 style.visibility style.visibility style.visibility
+串联型（降压， Buck ） 11.3.1    无 变压器的开关稳压电路 反馈控制总是使 v F 无限趋近于 V REF   ，则 2.  稳压原理 style.visibility style.visibility style.visibility style.visibility
+11.1   小功率整流滤波电路 11.2    线性稳压电路 11.3    开关稳压电路 11   直流电源电路
+3 .  集成 开关稳压器及其 应用 举例 11.3.1    无 变压器的开关稳压电路 集成 DC/DC 变换器         也 有 包括续流二极管、取样电路等在内 的单片 集成 DC/DC 变换器供选用。 style.visibility style.visibility style.visibility style.visibility style.visibility
+11.3.1    无 变压器的开关稳压电路 输入范围 + 7.0V ~ +40V ， 5V 输出 三角波振荡频率为 150kHz （ 1 ） 固定 输出降压型 DC/DC 变换器 LM2596-5.0 3 .  集成 开关稳压器及其 应用 举例
+LM2576-ADJ 11.3.1    无 变压器的开关稳压电路 （ 2 ）可 调降压型 DC/DC 变换器 3 .  集成 开关稳压器及其 应用 举例
+11.3.1    无 变压器的开关稳压电路 （ 2 ）可 调降压型 DC/DC 变换器 5V V O =0.76×(1+  R 1 / R 2 ) 代替续流二极管 TPS564201 3 .  集成 开关稳压器及其 应用 举例 style.visibility style.visibility style.visibility
+11.3.1    无 变压器的开关稳压电路 （ 3 ）极性反转 型 DC/DC 变换器 MAX764 3 .  集成 开关稳压器及其 应用 举例
+1 .  基本 电路及工作原理 11.3.2    带 变压器的开关稳压电路 反 激 式 T 1 导通时 N 2 储能 通过开关管 T 1 将高压直流变为高频方波电压，再通过高频变压器降压，然后滤波变为直流。 效率高，体积小 V I ：高压直流 T 1 ：功率开关管 T r ：高频变压器 D 1 ：续流二极管 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+11.3.2    带 变压器的开关稳压电路 稳压 通过反馈控制实现稳压，但 需要隔离电路。 1 .  基本 电路及工作原理 style.visibility
+2.  集成 控制器及开关稳压电源 11.3.2    带 变压器的开关稳压电路 含开关管的集成控制器应用 包含 T 1 的 集成控制器 高 、 低压电路隔离 style.visibility style.visibility
+11.3.2    带 变压器的开关稳压电路 集成 控制器 2.  集成 控制器及开关稳压电源 end style.visibility
+1 ）工作原理 利用二极管的单向导电性 1.  单相桥式整流电路 11.1   小功率整流滤波电路 style.visibility style.visibility
+1 ）工作原理 1.  单相桥式整流电路 11.1   小功率整流滤波电路 style.visibility style.visibility style.visibility
+1.  单相桥式整流电路 11.1   小功率整流滤波电路 3 ）纹波系数 4 ）平均整流电流 5 ）最大反向电压 （忽略二极管正向压降） 2 ）负载输出电压和输出电流的平均值 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+（ a ）电容滤波电路 （ b ）电感电容滤波电路（倒 L 型） #  为什么不用有源滤波电路 ? 2.  滤波电路 11.1   小功率整流滤波电路 style.visibility style.visibility style.visibility
+11.1   小功率整流滤波电路 2.  滤波电路 电容滤波电路

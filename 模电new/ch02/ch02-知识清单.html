@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第二章 运算放大器</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第二章 运算放大器</h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s25273289">2.1 集成电路运算放大器</a></li>
+<li><a href="#s21020680">2.2 理想运算放大器</a></li>
+  <li><a href="#s80973473">虚短和虚断 必考</a></li>
+<li><a href="#s43272396">2.3 基本线性运放电路</a></li>
+  <li><a href="#s91497032">同相放大电路 必考</a></li>
+  <li><a href="#s58500520">反相放大电路 必考</a></li>
+  <li><a href="#s66145026">同相与反相放大电路对比 重点</a></li>
+<li><a href="#s61756128">2.4 同相输入和反相输入放大电路的其他应用</a></li>
+  <li><a href="#s12851720">求和电路 高频</a></li>
+  <li><a href="#s30172551">求差电路 高频</a></li>
+  <li><a href="#s58349279">仪用放大器 重点</a></li>
+  <li><a href="#s28794452">积分和微分电路 高频</a></li>
+</ul>
+</div>
+
+<h2 id="s25273289">2.1 集成电路运算放大器</h2>
+<p><strong>动机</strong>：分立元件放大电路体积大、功耗高、可靠性差，需要集成化。</p>
+<p><span class="kp">集成电路运算放大器</span>：将多个晶体管、电阻等元件集成在一块硅片上的高增益放大器。</p>
+<p><span class="kp">端口</span>：反相输入端 $v_N$、同相输入端 $v_P$、输出端 $v_O$。无特定接地端。</p>
+<p><span class="kp">传输特性</span>：</p>
+$$v_O = A_{vo}(v_P - v_N)$$
+<p><span class="exp">$A_{vo}$ 为开环电压增益，通常 $>10^5$；线性区范围 $V_- < v_O < V_+$</span>。</p>
+<blockquote>易错：运放无特定接地端，输入输出都是差模信号。$v_O = A_{vo}(v_P - v_N)$ 中的差值是 $v_P - v_N$，不是相对于地的电压。</blockquote>
+
+<h2 id="s21020680">2.2 理想运算放大器</h2>
+<p><span class="kp">理想运放参数</span>：</p>
+<table>
+<tr><th>参数</th><th>理想值</th><th>实际值</th></tr>
+<tr><td>开环电压增益 $A_{vo}$</td><td>$\to \infty$</td><td>$>10^5$</td></tr>
+<tr><td>输入电阻 $r_i$</td><td>$\to \infty$</td><td>$>1M\Omega$</td></tr>
+<tr><td>输出电阻 $r_o$</td><td>$0$</td><td>$<100\Omega$</td></tr>
+<tr><td>开环带宽 $BW$</td><td>$\to \infty$</td><td>有限</td></tr>
+</table>
+
+<h3 id="s80973473">虚短和虚断 <span class="tag-must">必考</span></h3>
+<p><span class="kp">虚短</span>：$v_P \approx v_N$<br><span class="exp">——因为 $A_{vo} \to \infty$，要使输出有限，输入差值必须趋近于零</span></p>
+<p><span class="kp">虚断</span>：$i_P \approx 0$，$i_N \approx 0$<br><span class="exp">——因为 $r_i \to \infty$，输入端电流趋近于零</span></p>
+<blockquote>易错：虚短和虚断是分析运放线性应用电路的两个基本法则，必须同时使用。虚短意味着 $v_P = v_N$，但不是真正的短路；虚断意味着输入端无电流，但不是真正的开路。</blockquote>
+
+<h2 id="s43272396">2.3 基本线性运放电路</h2>
+<h3 id="s91497032">同相放大电路 <span class="tag-must">必考</span></h3>
+<p><strong>电路结构</strong>：信号从同相端输入，反馈从输出端通过 $R_1$、$R_2$ 分压接到反相端。</p>
+<p><span class="kp">电压增益</span>：</p>
+$$A_v = 1 + \frac{R_2}{R_1}$$
+<p><span class="exp">由虚短 $v_P = v_N = v_i$ 和虚断列 KCL 方程推导得出</span></p>
+<p><span class="kp">输入电阻</span>：$R_i \to \infty$</p>
+<p><span class="kp">输出电阻</span>：$R_o \to 0$</p>
+<p><span class="kp">电压跟随器</span>：$R_1 = \infty$ 或 $R_2 = 0$ 时，$A_v = 1$，$v_o = v_i$。用于隔离或缓冲。</p>
+
+<h3 id="s58500520">反相放大电路 <span class="tag-must">必考</span></h3>
+<p><strong>电路结构</strong>：信号通过 $R_1$ 接到反相端，同相端接地，反馈电阻 $R_f$ 接在输出端和反相端之间。</p>
+<p><span class="kp">电压增益</span>：</p>
+$$A_v = -\frac{R_f}{R_1}$$
+<p><span class="exp">负号表示输出与输入反相</span></p>
+<p><span class="kp">输入电阻</span>：$R_i = R_1$</p>
+<p><span class="kp">输出电阻</span>：$R_o \to 0$</p>
+<blockquote>易错：反相放大电路的输入电阻等于 $R_1$，不是无穷大。这是因为反相端是虚地（$v_N = 0$），信号电流全部流过 $R_1$。</blockquote>
+
+<h3 id="s66145026">同相与反相放大电路对比 <span class="tag-key">重点</span></h3>
+<table>
+<tr><th>特性</th><th>同相放大</th><th>反相放大</th></tr>
+<tr><td>电压增益</td><td>$1 + R_2/R_1$（同相）</td><td>$-R_f/R_1$（反相）</td></tr>
+<tr><td>输入电阻</td><td>$\to \infty$</td><td>$R_1$</td></tr>
+<tr><td>输出电阻</td><td>$\to 0$</td><td>$\to 0$</td></tr>
+<tr><td>虚地</td><td>无</td><td>有（$v_N = 0$）</td></tr>
+<tr><td>共模输入</td><td>有</td><td>无</td></tr>
+</table>
+
+<h2 id="s61756128">2.4 同相输入和反相输入放大电路的其他应用</h2>
+<h3 id="s12851720">求和电路 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">反相加法</span>：</p>
+$$v_O = -\left(\frac{R_f}{R_1}v_1 + \frac{R_f}{R_2}v_2 + ...\right)$$
+
+<h3 id="s30172551">求差电路 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">电压增益</span>（当 $\frac{R_3}{R_2} = \frac{R_4}{R_1}$ 时）：</p>
+$$A_v = \frac{R_3}{R_2}$$
+
+<h3 id="s58349279">仪用放大器 <span class="tag-key">重点</span></h3>
+<p><span class="kp">特点</span>：高输入电阻、高共模抑制比、高增益精度。用于放大微小差模信号。</p>
+
+<h3 id="s28794452">积分和微分电路 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">积分电路</span>：$v_O = -\frac{1}{RC}\int v_i dt$</p>
+<p><span class="kp">微分电路</span>：$v_O = -RC\frac{dv_i}{dt}$</p>
+
+
+
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第四章 场效应三极管及其放大电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第四章 场效应三极管及其放大电路</h1>
+<h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">本测试共28题，满分100分，建议用时30分钟</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+
+<script>
+var Q = [{"type": "choice", "points": 2, "question": "MOSFET是？", "options": ["电流控制器件", "电压控制器件", "功率控制器件", "频率控制器件"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：MOSFET是电压控制电流器件（VCCS），栅极电压控制漏极电流。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "N沟道增强型MOSFET导通的条件是？", "options": ["$v_{GS} < V_{TN}$", "$v_{GS} > V_{TN}$", "$v_{DS} > 0$", "$v_{DS} < 0$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：只有当 $v_{GS} > V_{TN}$ 时，才能形成导电沟道，MOSFET才能导通。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "MOSFET工作在恒流区的条件是？", "options": ["$v_{DS} < v_{GS} - V_{TN}$", "$v_{DS} \\geq v_{GS} - V_{TN}$", "$v_{GS} < V_{TN}$", "$v_{DS} = 0$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：恒流区（放大区）条件：$v_{GS} > V_{TN}$ 且 $v_{DS} \\geq v_{GS} - V_{TN}$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "共源放大电路的电压增益为？", "options": ["$g_m(R_D // R_L)$", "$-g_m(R_D // R_L)$", "$g_m R_D$", "$-g_m R_D$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：共源放大电路电压增益 $A_v = -g_m(R_D // R_L)$，负号表示反相。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "源极跟随器的电压增益约为？", "options": ["0", "1", "$-1$", "$\\infty$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：源极跟随器（共漏电路）电压增益 $A_v \\approx 1$，输出与输入同相。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "MOSFET的跨导 $g_m$ 反映的是？", "options": ["$v_{DS}$ 对 $i_D$ 的控制", "$v_{GS}$ 对 $i_D$ 的控制", "$i_D$ 对 $v_{GS}$ 的控制", "$i_D$ 对 $v_{DS}$ 的控制"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：跨导 $g_m = \\partial i_D / \\partial v_{GS}$，反映栅源电压对漏极电流的控制能力。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "共源放大电路的输入电阻主要取决于？", "options": ["$R_D$", "$R_S$", "栅极偏置电阻", "MOSFET的输入电阻"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：MOSFET栅极绝缘，输入电阻极高，放大电路的输入电阻主要由栅极偏置电阻决定。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "MOSFET小信号模型中的受控源是？", "options": ["VCVS", "CCVS", "VCCS", "CCCS"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：MOSFET小信号模型是电压控制电流源（VCCS），$g_m v_{gs}$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "共漏放大电路的输出电阻较？", "options": ["大", "小", "等于零", "无穷大"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：共漏放大电路（源极跟随器）输出电阻小，带负载能力强。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "N沟道耗尽型MOSFET的特点是？", "options": ["需要正栅压才能导通", "$v_{GS} = 0$ 时就有导电沟道", "只能工作在耗尽模式", "输入电阻低"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：耗尽型MOSFET在制造时已形成导电沟道，$v_{GS} = 0$ 时就能导通。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "MOSFET的栅极电流几乎为零。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：MOSFET栅极绝缘，输入电阻极高（$>10^{10}\\Omega$），栅极电流几乎为零。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "MOSFET的跨导 $g_m$ 与静态工作点无关。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：$g_m = 2K_n(V_{GSQ} - V_{TN})$，与静态工作点 $V_{GSQ}$ 有关。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "共源放大电路的输出与输入反相。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：共源放大电路电压增益为负值，输出与输入反相。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "源极跟随器可以用于阻抗变换。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：源极跟随器输入电阻高、输出电阻低，可以实现阻抗变换。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "MOSFET工作在可变电阻区时，$i_D$ 与 $v_{DS}$ 呈线性关系。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：可变电阻区中，$i_D$ 与 $v_{DS}$ 近似呈线性关系，MOSFET可作为压控电阻。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "P沟道MOSFET的工作原理与N沟道完全相同。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：P沟道MOSFET的工作原理与N沟道类似，但电压极性和电流方向相反。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "共栅放大电路适用于高频电路。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：共栅放大电路输入电阻低、高频特性好，适用于高频电路。", "pitfall": ""}, {"type": "short", "points": 6, "question": "比较MOSFET三种工作区域的特点。", "options": [], "answer": "1. 截止区：$v_{GS} < V_{TN}$，无导电沟道，$i_D = 0$。2. 可变电阻区：$v_{GS} > V_{TN}$ 且 $v_{DS} < v_{GS} - V_{TN}$，$i_D$ 与 $v_{DS}$ 近似线性，MOSFET相当于压控电阻。3. 恒流区（放大区）：$v_{GS} > V_{TN}$ 且 $v_{DS} \\geq v_{GS} - V_{TN}$，$i_D$ 基本不变，受 $v_{GS}$ 控制，用于放大。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释MOSFET跨导 $g_m$ 的物理意义和计算方法。", "options": [], "answer": "跨导 $g_m$ 反映栅源电压对漏极电流的控制能力，定义为 $g_m = \\partial i_D / \\partial v_{GS}$。计算公式：$g_m = 2K_n(V_{GSQ} - V_{TN})$，其中 $K_n$ 是电导常数，$V_{GSQ}$ 是静态栅源电压，$V_{TN}$ 是阈值电压。$g_m$ 越大，控制能力越强，放大能力越好。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "画出MOSFET的小信号模型，并说明各参数的含义。", "options": [], "answer": "小信号模型：栅源之间是开路的（因为栅极绝缘），漏源之间是受控电流源 $g_m v_{gs}$ 并联输出电阻 $r_{ds}$。$g_m$：跨导，反映 $v_{gs}$ 对 $i_d$ 的控制能力。$r_{ds}$：输出电阻，反映 $v_{ds}$ 对 $i_d$ 的影响（沟道长度调制效应）。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "比较共源、共漏、共栅三种放大电路的特点。", "options": [], "answer": "共源：电压增益高（反相），输入电阻高，输出电阻高，用于中间级。共漏（源极跟随器）：电压增益≈1（同相），输入电阻高，输出电阻低，用于输出级。共栅：电压增益高（同相），输入电阻低，输出电阻高，高频特性好，用于高频电路。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "试分析MOSFET共源极放大电路的工作原理，并推导其电压增益公式。", "options": [], "answer": "共源放大电路：信号从栅极输入，从漏极输出，源极接地。静态时，偏置电路设置合适的 $V_{GSQ}$ 和 $I_{DQ}$。动态时，输入信号 $v_{gs}$ 控制漏极电流 $i_d = g_m v_{gs}$，在负载电阻 $R_D // R_L$ 上产生输出电压 $v_o = -i_d(R_D // R_L) = -g_m v_{gs}(R_D // R_L)$。电压增益 $A_v = v_o/v_{gs} = -g_m(R_D // R_L)$，负号表示反相。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "解释为什么共源放大电路的电压增益为负值，并说明如何判断放大电路的相位关系。", "options": [], "answer": "共源放大电路电压增益为负值，表示输出与输入反相。原因：当 $v_{gs}$ 增大时，$i_d$ 增大，$R_D$ 上的压降增大，$v_{ds} = V_{DD} - i_d R_D$ 减小，所以输出与输入反相。判断相位关系的方法：瞬时极性法。假设输入信号某一时刻为正，沿信号传输方向标注极性，最终比较输出与输入的极性。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 10, "question": "设计一个MOSFET共源放大电路，要求电压增益 $|A_v| \\geq 10$，输入电阻 $>100k\\Omega$。选择合适的MOSFET和元件参数，画出电路图，计算静态工作点和动态指标。", "options": [], "answer": "选择N沟道增强型MOSFET，$V_{TN} = 1V$，$K_n = 0.5mA/V^2$。电源 $V_{DD} = 12V$，$R_D = 6k\\Omega$，$R_{G1} = 300k\\Omega$，$R_{G2} = 100k\\Omega$。静态分析：$V_{GSQ} = V_{DD} \\times R_{G2}/(R_{G1}+R_{G2}) = 3V$，$I_{DQ} = K_n(V_{GSQ}-V_{TN})^2 = 0.5(3-1)^2 = 2mA$，$V_{DSQ} = V_{DD} - I_{DQ}R_D = 12 - 2 \\times 6 = 0V$（不满足恒流区条件）。重新设计：取 $R_D = 3k\\Omega$，$V_{DSQ} = 12 - 2 \\times 3 = 6V > V_{GSQ} - V_{TN} = 2V$，满足条件。动态分析：$g_m = 2K_n(V_{GSQ}-V_{TN}) = 2 \\times 0.5 \\times 2 = 2mA/V$，$A_v = -g_m R_D = -2 \\times 3 = -6$（不满足要求）。增大 $R_D$ 到 $6k\\Omega$，$A_v = -12$，满足要求。", "explanation": "", "pitfall": ""}, {"type": "comprehensive", "points": 20, "question": "某MOSFET共源放大电路：$V_{DD} = 12V$，$R_D = 3k\\Omega$，$R_{G1} = 200k\\Omega$，$R_{G2} = 100k\\Omega$，$R_S = 1k\\Omega$，MOSFET参数 $V_{TN} = 1V$，$K_n = 0.5mA/V^2$。(1)计算静态工作点；(2)计算跨导 $g_m$；(3)计算电压增益 $A_v$；(4)计算输入电阻 $R_i$；(5)若负载 $R_L = 3k\\Omega$，求 $A_v$。", "options": [], "answer": "(1) $V_{GSQ} = V_{DD} \\times R_{G2}/(R_{G1}+R_{G2}) - I_{DQ}R_S$，假设 $I_{DQ} = K_n(V_{GSQ}-V_{TN})^2$，联立求解得 $V_{GSQ} \\approx 2.2V$，$I_{DQ} \\approx 0.72mA$，$V_{DSQ} = V_{DD} - I_{DQ}(R_D+R_S) = 12 - 0.72 \\times 4 = 9.12V$。(2) $g_m = 2K_n(V_{GSQ}-V_{TN}) = 2 \\times 0.5 \\times 1.2 = 1.2mA/V$。(3) $A_v = -g_m R_D = -1.2 \\times 3 = -3.6$。(4) $R_i = R_{G1} // R_{G2} = 200k // 100k = 66.7k\\Omega$。(5) $A_v = -g_m(R_D // R_L) = -1.2 \\times (3k // 3k) = -1.2 \\times 1.5 = -1.8$。", "explanation": "", "pitfall": ""}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "tf": "二、判断题", "short": "三、简答题", "essay": "四、问答题", "comprehensive": "五、综合题"}, "section_order": ["choice", "tf", "short", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+
+function build(){
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var s = q.type;
+    if (s !== sec) {
+      sec = s;
+      if (titles[s]) {
+        h += '<h3>' + titles[s] + '</h3>';
+      }
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i+1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+    h += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65+j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + q.explanation + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+
+  // Re-render MathJax for dynamically inserted formulas
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('selected');
+  }
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) {
+    target.classList.add('selected');
+  }
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      if (radio && parseInt(radio.value) === q.answer) {
+        score += q.points;
+        card.classList.add('correct');
+        badge.className = 'badge badge-ok';
+        badge.textContent = LABELS.correct_label;
+        correctEl.innerHTML = '';
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong');
+        badge.className = 'badge badge-no';
+        badge.textContent = LABELS.wrong_label;
+        var ansText = q.type === 'choice'
+          ? String.fromCharCode(65+q.answer) + '. ' + (q.options ? q.options[q.answer] : '')
+          : (q.answer === 0 ? LABELS.true_label : LABELS.false_label);
+        correctEl.innerHTML = LABELS.answer_prefix + ansText;
+        if (radio) {
+          var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+          if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+        }
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      }
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) tas[i].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = LABELS.graded_label;
+  }
+
+  // Re-render MathJax for revealed explanations
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+</script>
+</body>
+</html>

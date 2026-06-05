@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第八章 反馈放大电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第八章 反馈放大电路</h1>
+<h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">本测试共28题，满分100分，建议用时30分钟</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+
+<script>
+var Q = [{"type": "choice", "points": 2, "question": "负反馈可以？", "options": ["提高增益", "改善性能", "增大失真", "扩展带宽但降低增益"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：负反馈可以改善放大电路的性能，如提高增益稳定性、减小失真、扩展带宽等。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "电压串联负反馈稳定的是？", "options": ["输出电流", "输出电压", "输入电流", "输入电压"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：电压负反馈稳定输出电压，电流负反馈稳定输出电流。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "串联负反馈会使输入电阻？", "options": ["增大", "减小", "不变", "为零"], "answer": 0, "explanation": "<strong>正确答案</strong>：A。<br><br><strong>解析</strong>：串联负反馈使输入电阻增大 $(1+AF)$ 倍。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "深度负反馈时，闭环增益约等于？", "options": ["$A$", "$1/F$", "$AF$", "$A/(1+AF)$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：深度负反馈时，$A_f \\approx 1/F$，只与反馈网络有关。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "电压负反馈会使输出电阻？", "options": ["增大", "减小", "不变", "为无穷大"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：电压负反馈使输出电阻减小 $(1+AF)$ 倍。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "负反馈放大电路产生自激振荡的相位条件是？", "options": ["附加相移0°", "附加相移90°", "附加相移180°", "附加相移270°"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：自激振荡的相位条件是附加相移 $\\Delta\\phi = \\pm 180°$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "并联负反馈会使输入电阻？", "options": ["增大", "减小", "不变", "为无穷大"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：并联负反馈使输入电阻减小 $(1+AF)$ 倍。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "电流负反馈会使输出电阻？", "options": ["增大", "减小", "不变", "为零"], "answer": 0, "explanation": "<strong>正确答案</strong>：A。<br><br><strong>解析</strong>：电流负反馈使输出电阻增大 $(1+AF)$ 倍。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "负反馈放大电路的稳定条件要求相位裕度？", "options": ["$\\phi_m \\geq 0°$", "$\\phi_m \\geq 45°$", "$\\phi_m \\geq 90°$", "$\\phi_m \\geq 180°$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：稳定条件要求相位裕度 $\\phi_m \\geq 45°$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "负反馈可以？", "options": ["提高增益稳定性", "增大非线性失真", "减小带宽", "增大输入电阻（并联反馈）"], "answer": 0, "explanation": "<strong>正确答案</strong>：A。<br><br><strong>解析</strong>：负反馈可以提高增益稳定性，闭环增益的相对变化量比开环减小 $(1+AF)$ 倍。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "正反馈用于改善放大电路性能。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：负反馈用于改善性能，正反馈主要用于振荡电路。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "深度负反馈时，闭环增益只与反馈网络有关。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：深度负反馈时，$A_f \\approx 1/F$，只与反馈网络有关。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "串联负反馈使输入电阻减小。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：串联负反馈使输入电阻增大，不是减小。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "电压负反馈使输出电阻增大。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：电压负反馈使输出电阻减小，电流负反馈才使输出电阻增大。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "负反馈可以扩展带宽。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：负反馈使带宽扩展 $(1+AF)$ 倍，但增益减小。", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释负反馈改善放大电路性能的原理。", "options": [], "answer": "负反馈将输出信号送回输入端，与输入信号相减，使净输入信号减小。当输出因某种原因增大时，反馈信号增大，净输入信号减小，输出被拉回，从而稳定输出。这就像一个自动调节系统，通过反馈实现自我纠正。反馈深度 $(1+AF)$ 越大，调节能力越强，性能改善越明显。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "比较四种负反馈组态的特点和应用。", "options": [], "answer": "电压串联：稳定输出电压，输入电阻高，输出电阻低，用于电压放大。电压并联：稳定输出电压，输入电阻低，输出电阻低，用于互阻放大。电流串联：稳定输出电流，输入电阻高，输出电阻高，用于互导放大。电流并联：稳定输出电流，输入电阻低，输出电阻高，用于电流放大。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释负反馈放大电路产生自激振荡的原因和稳定条件。", "options": [], "answer": "原因：多级放大电路在高频或低频时产生附加相移，当附加相移达到180°时，负反馈变成正反馈，若此时 $|AF| \\geq 1$，就会产生自激振荡。稳定条件：幅值裕度 $G_m = 20\\lg|AF|_{\\phi=-180°} \\geq 10dB$，相位裕度 $\\phi_m = 180° + \\phi_{|AF|=1} \\geq 45°$。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释深度负反馈条件下虚短和虚断的含义。", "options": [], "answer": "深度负反馈时，$A_f \\approx 1/F$，净输入信号趋近于零。虚短：$v_P \\approx v_N$（串联负反馈），输入端电压差趋近于零，但不是真正的短路。虚断：$i_P = i_N = 0$（并联负反馈时虚短不成立），输入端电流趋近于零，但不是真正的开路。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "试分析负反馈对放大电路输入电阻和输出电阻的影响，并说明如何根据要求选择反馈类型。", "options": [], "answer": "对输入电阻：串联负反馈增大输入电阻（电压求和，$R_{if} = (1+AF)R_i$）；并联负反馈减小输入电阻（电流求和，$R_{if} = R_i/(1+AF)$）。对输出电阻：电压负反馈减小输出电阻（稳定电压，$R_{of} = R_o/(1+AF)$）；电流负反馈增大输出电阻（稳定电流，$R_{of} = (1+AF)R_o$）。设计选择：需要高输入电阻用串联反馈，需要低输入电阻用并联反馈；需要稳定输出电压用电压反馈，需要稳定输出电流用电流反馈。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "解释为什么负反馈可以减小非线性失真，并分析其局限性。", "options": [], "answer": "原理：负反馈将输出信号送回输入端，当输出出现失真（如顶部削波）时，反馈信号也失真，与输入信号相减后，净输入信号产生相反的失真（底部削波），从而补偿原始失真。局限性：1. 只能减小环内失真，对环外失真无效；2. 反馈深度有限，不能完全消除失真；3. 对大信号失真改善有限。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 10, "question": "设计一个负反馈放大电路，要求输入电阻 $>100k\\Omega$，输出电阻 $<100\\Omega$，电压增益 $A_v = 10$。选择合适的反馈组态，并分析电路性能。", "options": [], "answer": "选择电压串联负反馈：串联反馈提高输入电阻，电压反馈降低输出电阻。电路：同相放大电路，$R_1 = 10k\\Omega$，$R_f = 90k\\Omega$，$A_v = 1 + R_f/R_1 = 10$。若基本放大电路 $A = 1000$，$R_i = 10k\\Omega$，$R_o = 10k\\Omega$，则 $F = 1/10$，$1+AF = 101$。闭环性能：$R_{if} = 101 \\times 10k = 1.01M\\Omega > 100k\\Omega$（满足），$R_{of} = 10k/101 = 99\\Omega < 100\\Omega$（满足）。", "explanation": "", "pitfall": ""}, {"type": "comprehensive", "points": 20, "question": "某负反馈放大电路：开环增益 $A = 1000$，反馈系数 $F = 0.01$，开环输入电阻 $R_i = 10k\\Omega$，开环输出电阻 $R_o = 5k\\Omega$。(1)计算闭环增益 $A_f$；(2)若为电压串联负反馈，计算闭环输入电阻 $R_{if}$ 和输出电阻 $R_{of}$；(3)若为电流并联负反馈，计算 $R_{if}$ 和 $R_{of}$；(4)分析两种反馈对性能的不同影响。", "options": [], "answer": "(1) $A_f = A/(1+AF) = 1000/(1+1000 \\times 0.01) = 1000/11 = 90.9$。(2) 电压串联负反馈：$R_{if} = (1+AF)R_i = 11 \\times 10k = 110k\\Omega$，$R_{of} = R_o/(1+AF) = 5k/11 = 454\\Omega$。(3) 电流并联负反馈：$R_{if} = R_i/(1+AF) = 10k/11 = 909\\Omega$，$R_{of} = (1+AF)R_o = 11 \\times 5k = 55k\\Omega$。(4) 电压串联：高输入电阻、低输出电阻，适合电压放大。电流并联：低输入电阻、高输出电阻，适合电流放大。", "explanation": "", "pitfall": ""}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "tf": "二、判断题", "short": "三、简答题", "essay": "四、问答题", "comprehensive": "五、综合题"}, "section_order": ["choice", "tf", "short", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+
+function build(){
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var s = q.type;
+    if (s !== sec) {
+      sec = s;
+      if (titles[s]) {
+        h += '<h3>' + titles[s] + '</h3>';
+      }
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i+1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+    h += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65+j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + q.explanation + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+
+  // Re-render MathJax for dynamically inserted formulas
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('selected');
+  }
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) {
+    target.classList.add('selected');
+  }
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      if (radio && parseInt(radio.value) === q.answer) {
+        score += q.points;
+        card.classList.add('correct');
+        badge.className = 'badge badge-ok';
+        badge.textContent = LABELS.correct_label;
+        correctEl.innerHTML = '';
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong');
+        badge.className = 'badge badge-no';
+        badge.textContent = LABELS.wrong_label;
+        var ansText = q.type === 'choice'
+          ? String.fromCharCode(65+q.answer) + '. ' + (q.options ? q.options[q.answer] : '')
+          : (q.answer === 0 ? LABELS.true_label : LABELS.false_label);
+        correctEl.innerHTML = LABELS.answer_prefix + ansText;
+        if (radio) {
+          var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+          if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+        }
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      }
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) tas[i].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = LABELS.graded_label;
+  }
+
+  // Re-render MathJax for revealed explanations
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+</script>
+</body>
+</html>

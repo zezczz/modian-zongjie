@@ -1,0 +1,75 @@
+10.1   滤波电路 的基本概念与 分类 10.2   一 阶有源 滤波电路 10.3   高 阶有源 滤波电路 *10.4   开关电容滤波器 10.5   正弦波 振荡电路的振荡 条件 10.6   RC 正弦波振荡 电路 10.7   LC 正弦波振荡电路 10.8   非正弦信号产生 电路 10   信号处理与信号产生电路
+10   信号处理与信号产生电路 10.1   滤波电路 的基本概念与 分类 10.2   一阶有源滤波电路 10.3   高阶有源滤波电路 *10.4   开关电容滤波器 10.5   正弦波 振荡电路的振荡 条件 10.6   RC 正弦波振荡 电路 10.7   LC 正弦波振荡电路 10.8   非正弦信号产生 电路
+10.3.1   有源 低通滤波电路 10.3.2   有源高通滤波电路 10.3.3   有源带通滤波电路 10.3.4   有源带阻滤波电路 10.3   高阶 有源滤波电路
+(1)  传递函数 对于滤波电路，有 得滤波电路传递函数 （二阶） （同相比例） 10.3.1   有源 低通滤波电路 1.  二阶压控电压源 型 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+1.  二阶压控电压源 型 (1)  传递函数 令 称为 通带增益 称为 特征角频率 称为 等效品质因数 则 滤波电路才能稳定工作。 注意： 10.3.1   有源 低通滤波电路 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+(1)  传递函数 用               代入 ，得 可得归一化的幅频响应 相频响应 10.3.1   有源 低通滤波电路 1.  二阶压控电压源 型   =  c 时 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+(2)  幅频响应 归一化的幅频响应曲线 10.3.1   有源 低通滤波电路 1.  二阶压控电压源 型 style.visibility style.visibility
+(2)  幅频响应 产生增益过冲的原因是什么？ 上限角频率  H 和特征角频率  c 有 何差别？ 10.3.1   有源 低通滤波电路 1.  二阶压控电压源 型 当 Q =0 . 707 时，在通带内幅频响应曲线最大限度平坦，没有起伏，在阻带内则单调下降为 零 ， 为 巴特沃斯低通滤波器。 style.visibility style.visibility style.visibility
+10.3.1   有源 低通滤波电路 2.  二 阶 无限 增益多路反馈型 (1)  传递函数 通带 增益 特征 角频率 等效 品质因数 则 Q 不会 出现 负值，对增益无限制 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+3.  高阶 10.3.1   有源 低通滤波电路 通过级联 二阶 或一阶有源 滤波电路 构成高阶有源滤波电路
+式中 n 为阶数  c 为 3dB 截止角频率 A 0 为通带电压增益 10.3.1   有源 低通滤波电路 —— n 阶 巴特沃斯 3.  高阶 传递函数 归一化幅频响应 通常借助模拟 滤波器的 软件 设计 工具 来完成。 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+10.1   滤波电路的基本概念与分类 1.  基本概念 有源滤波器 ： 由有源器件和相关元件构成的滤波器。 滤波器：是一种能使有用频率信号通过而同时抑制或衰减无                 用频率信号的电子装置。 滤波电路的传递函数 时，有 其中 ——  模，幅频响应 ——  相位角，相频响应 群时延响应 相位失真与群时延响应有关 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+10.3.1   有源 低通滤波电路 10.3.2   有源高通滤波电路 10.3.3   有源带通滤波电路 10.3.4   有源带阻滤波电路 10.3   高阶 有源滤波电路
+10.3.2   有源高通滤波电路 二阶压控电压源型      将低通电路中的电容和电阻对换，便成为高通电路。 传递函数 归一化的幅频响应 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+10.3.2   有源高通滤波电路 二阶压控电压源型 style.visibility
+10.3.1   有源 低通滤波电路 10.3.2   有源高通滤波电路 10.3.3   有源带通滤波电路 10.3.4   有源带阻滤波电路 10.3   高阶 有源滤波电路
+10.3.3   有源带通滤波电路 1.  电路组成原理 可由低通和高通串联得到 必须满足 低通截止角频率 高通截止角频率 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+2.  二 阶压控电压源型 传递函数 令 得 10.3.3   有源带通滤波电路 则 有   =  0 时，有最大值 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+2.  二 阶压控电压源型 10.3.3   有源带通滤波电路 截止角频率 BW  =  f 0 / Q 带宽 style.visibility style.visibility style.visibility style.visibility
+10.3.1   有源 低通滤波电路 10.3.2   有源高通滤波电路 10.3.3   有源带通滤波电路 10.3.4   有源带阻滤波电路 10.3   高阶 有源滤波电路
+10.3.4   有源带阻滤波电路 1.  电路组成原理 可由低通和高通并联得到 必须满足 style.visibility style.visibility style.visibility style.visibility
+双 T 选频网络 10.3.4   有源带阻滤波电路 1.  电路组成原理 双 T 带阻滤波电路 2.  幅频特性 style.visibility style.visibility style.visibility style.visibility
+2.  分类 低通（ LPF ） 高通（ HPF ） 带通（ BPF ） 带阻（ BRF ） 全通（ APF ）          希望 抑制 50Hz 的干扰信号，应选用哪种类型的滤波电路？          放大 音频信号，应选用哪种类型的滤波电路？ 10.1   滤波电路的基本概念与分类 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+10   信号处理与信号产生电路 10.1   滤波电路 的基本概念与 分类 10.2   一阶有源滤波电路 10.3   高 阶有源 滤波电路 *10.4   开关电容滤波器 10.5   正弦波 振荡电路的振荡 条件 10.6   RC 正弦波振荡 电路 10.7   LC 正弦波振荡电路 10.8   非正弦信号产生 电路
+* 10.4   开关电容滤波器 略
+10   信号处理与信号产生电路 10.1   滤波电路 的基本概念与 分类 10.2   一阶有源滤波电路 10.3   高 阶有源 滤波电路 *10.4   开关电容滤波器 10.5   正弦波振荡电路的振荡条件 10.6   RC 正弦波振荡 电路 10.7   LC 正弦波振荡电路 10.8   非正弦信号产生 电路
+正反馈放大电路框图 （注意与负反馈方框图的差别） 若环路增益 则 无   时， 仍有稳定的输出。 又 所以振荡条件为 振幅平衡条件 相位平衡条件 10.5   正弦波振荡电路的振荡条件 1.  振荡条件 style.visibility style.visibility style.visibility style.visibility
+2.  起振和稳幅 起振条件 #  起 振的信号源来自何处？ 电路器件内部噪声以及电源接通扰动           当 输出信号幅值增加到一定程度时，就要限制它继续增加，否则波形将出现失真。           噪声 中，满足相位平衡条件的某 一角频率  0 的噪声信号被放大，成为振荡电路的输出信号。           稳 幅的作用就是，当输出信号幅值增加到一定程度时，使振幅平衡条件 从                回到 10.5   正弦波振荡电路的振荡条件 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+3.  振荡电路基本组成部分 放大电路（包括负反馈放大电路） 反馈网络（构成正反馈的） 选频网络（选择满足相位平衡条件的一个频率。经常与反馈网络合二为一。） 稳幅环节 10.5   正弦波振荡电路的振荡条件 style.visibility style.visibility style.visibility style.visibility
+10   信号处理与信号产生电路 10.1   滤波电路 的基本概念与 分类 10.2   一阶有源滤波电路 10.3   高 阶有源 滤波电路 *10.4   开关电容滤波器 10.5   正弦波振荡电路的振荡条件 10.6   RC 正弦波振荡电路 10.7   LC 正弦波振荡电路 10.8   非正弦信号产生 电路
+10.6   RC 正弦波振荡电路 1.  电路组成 作为 正反馈 包含 负反馈 RC 桥式振荡电路 style.visibility style.visibility
+2.  RC 串并联选频网络的选频特性 反馈系数 幅频响应 又 且令 则 相频响应 10.6   RC 正弦波振荡电路 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+当 幅频响应有最大值 相频响应 2.  RC 串并联选频网络的选频特性 10.6   RC 正弦波振荡电路 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+3.  频率响应 的逼近方式 10.1   滤波电路的基本概念与分类 相同阶数
+10.6   RC 正弦波振荡电路 style.visibility style.visibility
+3.  振荡电路工作原理 (+) (+) (+) (+) 若放大电路的电压增益   满足相位平衡条件： 则满足振幅平衡条件 当 时， 输出正弦波的频率  RC 正弦波振荡电路一般用于产生频率低于  1 MHz  的正弦波 10.6   RC 正弦波振荡电路 style.visibility style.visibility ppt_w ppt_h style.rotation style.visibility ppt_w ppt_h style.rotation style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+4.  稳幅措施 热敏电阻 热敏元件 起振时 即 热敏电阻的作用 稳幅 10.6   RC 正弦波振荡电路 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+4.  稳幅措施 10.6   RC 正弦波振荡电路 场效应管（ JFET ） 稳幅原理 稳幅 整流滤波 T  为压控电阻 整流滤波电路 可变电阻区，斜率随 v GS 不同而变化 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+二极管 稳幅原理 稳幅 起振时 稳幅环节 4.  稳幅措施 10.6   RC 正弦波振荡电路 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+RC 移相式正弦波振荡电路 10.6   RC 正弦波振荡电路 style.visibility
+RC 移相式正弦波振荡电路 其中 代入 10.6   RC 正弦波振荡电路 Z 1 Z 2 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+RC 移相式正弦波振荡电路 要求 即 此时 得 根据 相位 平衡条件 求得 10.6   RC 正弦波振荡电路 根据相位平衡条件 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+从相位条件看电路能振荡吗？ 思考
+从相位条件看电路能振荡吗？ 思考
+3.  频率响应 的逼近方式 10.1   滤波电路的基本概念与分类 反切比雪夫 椭圆函数
+10   信号处理与信号产生电路 10.1   滤波电路 的基本概念与 分类 10.2   一阶有源滤波电路 10.3   高 阶有源 滤波电路 *10.4   开关电容滤波器 10.5   正弦波振荡电路的振荡条件 10.6   RC 正弦波振荡电路 10.7   LC 正弦波振荡电路 10.8   非正弦信号产生 电路
+10.7   LC 正弦波振荡电路 略
+10   信号处理与信号产生电路 10.1   滤波电路 的基本概念与 分类 10.2   一阶有源滤波电路 10.3   高 阶有源 滤波电路 *10.4   开关电容滤波器 10.5   正弦波振荡电路的振荡条件 10.6   RC 正弦波振荡电路 10.7   LC 正弦波振荡电路 10.8   非正弦信号产生电路
+10.8.1   电压比较器 10.8.2   方波产生电路 10.8.3   锯齿波产生电路 10.8   非正弦信号产生电路
+1.  单门限电压比较器 10.8.1   电压比较器 工作于开环状态，虚 短不再 成立 极大的输入电阻 使 输入端电流仍为零 极高的增益使得          v ID   > 0  时，  v O 为正饱电压值          v ID   < 0  时，  v O 为 负 饱 电压值 忽略输出饱和压降时，有          v I   >  V REF    时， v O  =   V OH   =  +V CC          v I   <  V REF   时，  v O  =   V OL  =   -   V CC 电压传输特性 v O 与 v I 同相 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+1.  单门限电压比较器 10.8.1   电压比较器 v I 为正弦波时 v O 与 v I 同相 style.visibility
+1.  单门限电压比较器 10.8.1   电压比较器 颠倒 V REF 的极性，传输特性为 v O 与 v I 同相 style.visibility style.visibility style.visibility
++ - 1.  单门限电压比较器 10.8.1   电压比较器 互换同相端和反相端 v O 与 v I 同相 传输特性 v O 与 v I 反相 style.visibility style.visibility style.visibility style.visibility style.visibility
+1.  单门限电压比较器 10.8.1   电压比较器 提高 响应速度的限幅电路 集成电压比较器 （ Comparator ） style.visibility
+电路可以产生脉冲宽度调制波形（ PWM 波形） 1.  单门限电压比较器 10.8.1   电压比较器 当 v I 为三角波，且门限 V REF 变化时 v O 的脉冲宽度受 V REF 的控制 style.visibility style.visibility style.visibility style.visibility style.visibility
+4.  实际 滤波电路的参数说明 10.1   滤波电路的基本概念与分类 （ 1 ）通带纹波（  max ） （ 2 ）通带 截止 角 频率 （  p ） （ 3 ）阻带 截止 角 频率 （  s ） （ 4 ）阻带最小衰减量（  min ） （ 5 ） 频率选择 性因子 （  s /  p ） style.visibility style.visibility style.visibility style.visibility style.visibility
+解： 例 图示为另一种形式的单门限电压比较器，试求出其门限电压 ( 阈值电压 ) V T ，画出其电压传输特性。设运放输出的高、低电平分别为 V OH 和 V OL 。  利用叠加原理可得 理想情况下，输出电压发生跳变时对应的 v P ＝   v N ＝ 0 ，即 门限电压 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+单门限比较器的抗干扰能力 应为高电平 错误电平 10.8.1   电压比较器 门限电压能否跟随输出电压跳变而跳变？ style.visibility style.visibility style.visibility
+2.  迟滞比较器 （ 1 ） 电路组成（反相输入） （ 2 ） 门限电压 上门限电压 下门限电压 回差电压 正反馈 10.8.1   电压比较器 对应 v O 的 2 个电压值有 2 个 门限 电压 v O 跳变时对应的输入电压即为门限电压 v O 跳变瞬间有 v I   =   v N  =   v P  ， v P 同时与 V REF 和 v O 有关 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+（ 3 ） 传输特性 （ 4 ）特点 10.8.1   电压比较器   门限电压随输出电压变化   任何时刻只有一个有效的门限电压   当 输入介于两 门限 之间变化时 输出 不变 2.  迟滞比较器  只有 当 输入从低于下门限增加到超过上 门限或 从高于上门限下降到低于下门限时，输出必定翻转 。翻转方向取决于输入输出的相位关系。 v O 与 v I 反相 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+解： （ 1 ）门限电压 （ 3 ） 输出电压波形 例 电路如 图所示 ，试求门限电压，画出传输特性 和输入信号 下的输出电压波形。 （ 2 ）传输特性 与单门限相比，迟滞比较器在电路翻转时有何特点 ? style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+解： （ 1 ）门限电压 例 电路如图示，试求门限电压，画出传输特性。 （ 2 ）传输特性 翻转时刻， v P = v N =0 10.8.1   电压比较器 v O 与 v I 同相 同相迟滞比较器 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+集成电压比较器与集成运算放大器比较：          开环增益低、失调电压大、共模抑制比小，灵敏度往往不如用集成运放构成的比较器高。           但集成电压比较器中无频率补偿电容，因此转换速率高，改变输出状态的典型响应时间是 30 ～ 200ns 。    相同条件下 741 集成运算放大器的响应时间为 30 s 左右。 3.  集成电压比较器 10.8.1   电压比较器 style.visibility style.visibility style.visibility
+10.8.1   电压比较器 4.  窗口比较器 LM339 为片内 4 个独立的集成电压比较器，且输出端 BJT 的集电极 是 开路的，所以可以将多个输出端并接“线与”，但需要外接上拉电阻 R 才有高电平输出。 style.visibility style.visibility
+10.8.1   电压比较器 10.8.2   方波产生电路 10.8.3   锯齿波产生电路 10.8   非正弦信号产生电路
+10.8.2   方波产生 电路 1)  电路组成（多谐振荡电路） 迟滞比较器 RC 充放电支路 稳压管双向限幅 能否不串入该电阻？ style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+10   信号处理与信号产生电路 10.1   滤波电路 的基本概念与 分类 10.2   一阶有源滤波电路 10.3   高 阶有源 滤波电路 *10.4   开关电容滤波器 10.5   正弦波 振荡电路的振荡 条件 10.6   RC 正弦波振荡 电路 10.7   LC 正弦波振荡电路 10.8   非正弦信号产生 电路
+2)  工作原理      由于迟滞比较器中正反馈的作用，电源接通后瞬间，输出便进入饱和状态。 假设为正向饱和状态 RC  放电 RC  充电 10.8.2   方波产生 电路 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+利用三要素法公式 t =0 其中 则 又 3)   振荡周期 10.8.2   方波产生 电路 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+4)  占空比调 10.8.2   方波产生 电路
+10.8.1   电压比较器 10.8.2   方波产生电路 10.8.3   锯齿波产生电路 10.8   非正弦信号产生电路
+10.8.3   锯齿 波产生电路 同相输入 迟滞比较器 积分电路 充放电时间常数不同 style.visibility style.visibility style.visibility style.visibility style.visibility
+10.8.3   锯齿 波产生电路 end style.visibility style.visibility style.visibility
+改用反相放大电路有何差别？ 10.2   一 阶 有源滤波电路 1.  低通 传递函数 其中 特征角频率 故，幅频响应为 增益 一阶滤波器的带外衰减速率较慢 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility
+2.  高通 电路如何改变？ 幅频响应如何变化？ 一阶有源低通滤波电路 10.2   一 阶 有源滤波电路 优点： 不用电感、体积小、重量 轻 有一定的电压放大和 缓冲作用 缺点： 工作频率难以做得很 高 不适宜大功率 场合 有源 滤波器与无源滤波器相比 style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility style.visibility

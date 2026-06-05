@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第九章 功率放大电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第九章 功率放大电路</h1>
+<h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">本测试共28题，满分100分，建议用时30分钟</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+
+<script>
+var Q = [{"type": "choice", "points": 2, "question": "甲类功率放大电路的最大效率为？", "options": ["25%", "50%", "78.5%", "100%"], "answer": 0, "explanation": "<strong>正确答案</strong>：A。<br><br><strong>解析</strong>：甲类放大电路三极管导通角360°，最大效率≤25%。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "乙类互补对称电路的最大效率为？", "options": ["25%", "50%", "78.5%", "100%"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：乙类互补对称电路最大效率 $\\eta_{max} = \\pi/4 \\approx 78.5\\%$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "交越失真是由于？", "options": ["放大倍数太大", "两管在过零附近都截止", "电源电压太低", "负载电阻太小"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：乙类互补电路在输入过零附近，两管都截止，产生交越失真。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "消除交越失真的方法是？", "options": ["增大输入信号", "采用甲乙类偏置", "减小负载电阻", "降低电源电压"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：采用甲乙类，给两管加适当静态偏置，使其微导通，消除交越失真。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "OCL电路是指？", "options": ["单电源互补对称电路", "双电源互补对称电路", "变压器耦合电路", "变压器推挽电路"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：OCL（Output Capacitor Less）是双电源互补对称电路，输出直接耦合负载。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "乙类互补电路的最大输出功率 $P_{om}$ 等于？", "options": ["$V_{CC}^2/R_L$", "$V_{CC}^2/(2R_L)$", "$V_{CC}^2/(4R_L)$", "$V_{CC}/R_L$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：$P_{om} = V_{CC}^2/(2R_L)$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "D类功率放大电路的特点是？", "options": ["失真小，效率低", "失真大，效率高", "失真小，效率高", "工作在线性区"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：D类放大MOS管工作在开关状态，效率极高（接近100%），通过PWM实现低失真。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "功率放大电路的主要目的是？", "options": ["提高电压增益", "输出较大功率", "减小失真", "提高输入电阻"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：功率放大电路以输出较大功率为目的，驱动负载。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "甲乙类互补电路的效率？", "options": ["低于甲类", "等于乙类", "介于甲类和乙类之间", "高于乙类"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：甲乙类是甲类和乙类的折中，效率介于两者之间。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "乙类互补电路中，T1和T2分别在什么时间导通？", "options": ["同时导通", "正半周T1导通，负半周T2导通", "正半周T2导通，负半周T1导通", "都截止"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：OCL电路中，正半周NPN管T1导通，负半周PNP管T2导通。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "甲类功率放大电路的效率最高。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：甲类效率最低（≤25%），乙类效率最高（≤78.5%）。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "交越失真是乙类互补电路的特有问题。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：乙类互补电路在过零附近两管都截止，产生交越失真。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "功率放大电路三极管工作在放大区。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：功率放大电路三极管工作在接近极限状态，乙类时在截止和饱和之间切换。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "OTL电路是单电源互补对称电路。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：OTL（Output Transformer Less）是单电源互补对称电路，输出通过大电容耦合负载。", "pitfall": ""}, {"type": "short", "points": 6, "question": "比较甲类、乙类、甲乙类功率放大电路的特点。", "options": [], "answer": "甲类：导通角360°，效率≤25%，失真小，静态电流大。乙类：导通角180°，效率≤78.5%，有交越失真，静态电流为零。甲乙类：导通角180°~360°，效率介于甲乙之间，交越失真小，有小的静态电流。甲类适合小功率高保真场合，乙类适合大功率场合，甲乙类是折中方案。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释交越失真的产生原因和消除方法。", "options": [], "answer": "产生原因：乙类互补电路中，当输入信号过零附近（小于三极管导通电压），两管都截止，输出为零，产生失真。消除方法：采用甲乙类，给两管加适当的静态偏置（用二极管或 $V_{BE}$ 扩大电路），使两管在静态时微导通，消除死区，从而消除交越失真。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "计算乙类互补电路的最大输出功率和最大效率。", "options": [], "answer": "最大输出功率：$P_{om} = V_{CC}^2/(2R_L)$（当 $V_{om} = V_{CC}$ 时）。直流电源供给功率：$P_V = 2V_{CC}V_{om}/(\\pi R_L)$。效率：$\\eta = P_o/P_V = \\pi V_{om}/(4V_{CC})$。当 $V_{om} = V_{CC}$ 时，最大效率 $\\eta_{max} = \\pi/4 \\approx 78.5\\%$。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "试分析乙类互补对称功率放大电路的工作原理，并推导其最大输出功率和效率公式。", "options": [], "answer": "工作原理：OCL电路由NPN和PNP管互补对称组成，双电源供电。正半周T1导通、T2截止，电流从 $V_{CC}$ 经T1流向负载；负半周T2导通、T1截止，电流从负载经T2流向 $-V_{CC}$。两管轮流工作，在负载上得到完整的正弦波。最大输出功率：当 $V_{om} = V_{CC}$ 时，$P_{om} = V_{CC}^2/(2R_L)$。效率：$\\eta = \\pi V_{om}/(4V_{CC})$，最大效率78.5%。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "比较OCL和OTL电路的异同，并说明各自的优缺点。", "options": [], "answer": "相同点：都是互补对称功率放大电路，工作原理相同。不同点：OCL双电源供电，输出直接耦合；OTL单电源供电，输出通过大电容耦合。OCL优点：输出无直流偏移，低频特性好。OTL优点：只需单电源，成本低。OCL缺点：需要双电源。OTL缺点：大电容影响低频响应和体积。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 10, "question": "设计一个乙类互补对称功率放大电路，要求最大输出功率 $P_{om} \\geq 10W$，负载 $R_L = 8\\Omega$。计算电源电压 $V_{CC}$，选择功率管参数。", "options": [], "answer": "由 $P_{om} = V_{CC}^2/(2R_L) \\geq 10W$，得 $V_{CC} \\geq \\sqrt{2 \\times 10 \\times 8} = 12.65V$，取 $V_{CC} = 13V$。功率管参数选择：1. 最大集电极电流 $I_{CM} \\geq V_{CC}/R_L = 13/8 = 1.625A$。2. 最大集射极电压 $V_{(BR)CEO} \\geq 2V_{CC} = 26V$。3. 最大管耗 $P_{CM} \\geq 0.2P_{om} = 2W$。可选用TIP41A/TIP42A对管。", "explanation": "", "pitfall": ""}, {"type": "comprehensive", "points": 20, "question": "某乙类互补对称功率放大电路：$V_{CC} = 15V$，$R_L = 8\\Omega$。(1)计算最大输出功率 $P_{om}$；(2)计算最大效率 $\\eta_{max}$；(3)计算管耗最大时的输出功率 $P_{Tmax}$；(4)若要求输出功率 $P_o = 5W$，计算效率；(5)若采用甲乙类，静态电流 $I_{CQ} = 5mA$，计算静态功耗。", "options": [], "answer": "(1) $P_{om} = V_{CC}^2/(2R_L) = 225/16 = 14.06W$。(2) $\\eta_{max} = \\pi/4 \\approx 78.5\\%$。(3) 管耗最大时 $V_{om} = 2V_{CC}/\\pi = 9.55V$，$P_{Tmax} = 2V_{CC}^2/(\\pi^2 R_L) = 2 \\times 225/(9.87 \\times 8) = 5.7W$。(4) $P_o = 5W$ 时，$V_{om} = \\sqrt{2P_o R_L} = \\sqrt{80} = 8.94V$，$\\eta = \\pi V_{om}/(4V_{CC}) = \\pi \\times 8.94/(4 \\times 15) = 46.8\\%$。(5) 静态功耗 $P_Q = 2V_{CC} I_{CQ} = 2 \\times 15 \\times 0.005 = 0.15W$。", "explanation": "", "pitfall": ""}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "tf": "二、判断题", "short": "三、简答题", "essay": "四、问答题", "comprehensive": "五、综合题"}, "section_order": ["choice", "tf", "short", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+
+function build(){
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var s = q.type;
+    if (s !== sec) {
+      sec = s;
+      if (titles[s]) {
+        h += '<h3>' + titles[s] + '</h3>';
+      }
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i+1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+    h += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65+j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + q.explanation + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+
+  // Re-render MathJax for dynamically inserted formulas
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('selected');
+  }
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) {
+    target.classList.add('selected');
+  }
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      if (radio && parseInt(radio.value) === q.answer) {
+        score += q.points;
+        card.classList.add('correct');
+        badge.className = 'badge badge-ok';
+        badge.textContent = LABELS.correct_label;
+        correctEl.innerHTML = '';
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong');
+        badge.className = 'badge badge-no';
+        badge.textContent = LABELS.wrong_label;
+        var ansText = q.type === 'choice'
+          ? String.fromCharCode(65+q.answer) + '. ' + (q.options ? q.options[q.answer] : '')
+          : (q.answer === 0 ? LABELS.true_label : LABELS.false_label);
+        correctEl.innerHTML = LABELS.answer_prefix + ansText;
+        if (radio) {
+          var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+          if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+        }
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      }
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) tas[i].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = LABELS.graded_label;
+  }
+
+  // Re-render MathJax for revealed explanations
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+</script>
+</body>
+</html>

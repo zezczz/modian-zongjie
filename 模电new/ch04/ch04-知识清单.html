@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第四章 场效应三极管及其放大电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第四章 场效应三极管及其放大电路</h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s81268195">4.1 MOS场效应三极管</a></li>
+  <li><a href="#s13830510">N沟道增强型MOSFET 必考</a></li>
+  <li><a href="#s70612796">P沟道MOSFET 高频</a></li>
+<li><a href="#s48692294">4.2 MOSFET基本共源极放大电路</a></li>
+  <li><a href="#s54630283">小信号模型分析法 必考</a></li>
+<li><a href="#s37110102">4.3 图解分析法</a></li>
+<li><a href="#s33131332">4.4 小信号模型分析法</a></li>
+<li><a href="#s46369547">4.5 共漏极和共栅极放大电路</a></li>
+</ul>
+</div>
+
+<h2 id="s81268195">4.1 MOS场效应三极管</h2>
+<p><strong>动机</strong>：BJT是电流控制器件，输入电阻低；需要电压控制、高输入电阻的器件。</p>
+<p><span class="kp">MOSFET</span>：金属-氧化物-半导体场效应晶体管，电压控制电流器件（VCCS）。</p>
+
+<h3 id="s13830510">N沟道增强型MOSFET <span class="tag-must">必考</span></h3>
+<p><span class="kp">结构</span>：栅极G、源极S、漏极D、衬底B。栅极绝缘，输入电阻极高。</p>
+<p><span class="kp">工作原理</span>：</p>
+<ul>
+<li>$v_{GS} < V_{TN}$：无导电沟道，$i_D = 0$（截止）</li>
+<li>$v_{GS} > V_{TN}$：形成导电沟道（反型层），$i_D$ 受 $v_{GS}$ 控制</li>
+<li>$V_{TN}$：阈值电压（开启电压）</li>
+</ul>
+
+<p><span class="kp">输出特性曲线</span>：</p>
+<table>
+<tr><th>区域</th><th>条件</th><th>特点</th></tr>
+<tr><td>截止区</td><td>$v_{GS} < V_{TN}$</td><td>$i_D = 0$</td></tr>
+<tr><td>可变电阻区</td><td>$v_{DS} < v_{GS} - V_{TN}$</td><td>$i_D$ 与 $v_{DS}$ 近似线性</td></tr>
+<tr><td>恒流区（放大区）</td><td>$v_{DS} \geq v_{GS} - V_{TN}$</td><td>$i_D$ 基本不变</td></tr>
+</table>
+
+<p><span class="kp">恒流区I-V特性</span>：</p>
+$$i_D = K_n(v_{GS} - V_{TN})^2(1 + \lambda v_{DS})$$
+<p><span class="exp">$K_n$ 为电导常数，$\lambda$ 为沟道长度调制系数</span></p>
+<blockquote>易错：MOSFET是电压控制器件，栅极电流几乎为零；BJT是电流控制器件，基极电流控制集电极电流。</blockquote>
+
+<h3 id="s70612796">P沟道MOSFET <span class="tag-freq">高频</span></h3>
+<p><span class="exp">与N沟道MOSFET工作原理类似，但电压极性和电流方向相反。增强型P沟道MOSFET的 $V_{TP} < 0$。</span></p>
+
+<h2 id="s48692294">4.2 MOSFET基本共源极放大电路</h2>
+<p><span class="kp">电路组成</span>：MOSFET + 偏置电路 + 负载电阻。</p>
+<p><span class="kp">静态工作点</span>：$V_{GSQ}$、$I_{DQ}$、$V_{DSQ}$，需验证工作在恒流区。</p>
+
+<h3 id="s54630283">小信号模型分析法 <span class="tag-must">必考</span></h3>
+<p><span class="kp">MOSFET小信号模型</span>：电压控制电流源（VCCS），$g_m v_{gs}$。</p>
+<p><span class="kp">跨导</span>：</p>
+$$g_m = 2K_n(V_{GSQ} - V_{TN})(1 + \lambda V_{DSQ}) \approx 2K_n(V_{GSQ} - V_{TN})$$
+<p><span class="exp">$g_m$ 反映 $v_{GS}$ 对 $i_D$ 的控制能力，单位：S（西门子）或 A/V</span></p>
+
+<p><span class="kp">共源放大电路动态指标</span>：</p>
+$$A_v = -g_m(R_D // R_L)$$
+$$R_i = R_{G1} // R_{G2}$$
+$$R_o = R_D$$
+
+<h2 id="s37110102">4.3 图解分析法</h2>
+<p><span class="kp">直流负载线</span>：$v_{DS} = V_{DD} - i_D R_D$</p>
+<p><span class="kp">静态工作点Q</span>：负载线与输出特性曲线的交点。</p>
+
+<h2 id="s33131332">4.4 小信号模型分析法</h2>
+<p><span class="exp">适用于小信号情况，将非线性器件线性化处理。</span></p>
+
+<h2 id="s46369547">4.5 共漏极和共栅极放大电路</h2>
+<table>
+<tr><th>组态</th><th>电压增益</th><th>输入电阻</th><th>输出电阻</th><th>用途</th></tr>
+<tr><td>共源</td><td>高（反相）</td><td>高</td><td>高</td><td>中间级</td></tr>
+<tr><td>共漏（源极跟随器）</td><td>≈1（同相）</td><td>高</td><td>低</td><td>输出级</td></tr>
+<tr><td>共栅</td><td>高（同相）</td><td>低</td><td>高</td><td>高频电路</td></tr>
+</table>
+
+
+
+</body>
+</html>

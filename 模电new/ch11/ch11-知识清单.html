@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第十一章 直流电源电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第十一章 直流电源电路</h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s31195695">11.1 小功率整流滤波电路</a></li>
+  <li><a href="#s30507035">单相桥式整流电路 必考</a></li>
+  <li><a href="#s64813755">滤波电路 必考</a></li>
+<li><a href="#s34136446">11.2 线性稳压电路</a></li>
+  <li><a href="#s32992368">串联反馈式稳压电路 必考</a></li>
+  <li><a href="#s86385662">低压差稳压器（LDO） 重点</a></li>
+  <li><a href="#s17756038">集成稳压器 高频</a></li>
+<li><a href="#s10743950">11.3 开关稳压电路</a></li>
+  <li><a href="#s81591955">开关稳压电路的特点 重点</a></li>
+  <li><a href="#s38697568">开关DC/DC变换器 必考</a></li>
+</ul>
+</div>
+
+<h2 id="s31195695">11.1 小功率整流滤波电路</h2>
+<p><strong>动机</strong>：将交流电网电源转换为稳定的直流电源。</p>
+<p><span class="kp">电源组成</span>：变压器 → 整流 → 滤波 → 稳压</p>
+
+<h3 id="s30507035">单相桥式整流电路 <span class="tag-must">必考</span></h3>
+<p><span class="kp">工作原理</span>：四个二极管组成电桥，利用二极管的单向导电性，将交流电转换为脉动直流电。</p>
+<p><span class="kp">负载电压平均值</span>：</p>
+$$V_L = 0.9V_2$$
+<p><span class="exp">$V_2$ 为变压器二次绕组电压有效值</span></p>
+
+<h3 id="s64813755">滤波电路 <span class="tag-must">必考</span></h3>
+<p><span class="kp">电容滤波</span>：</p>
+$$V_L = 1.2V_2 \quad (\tau_d \geq (3\sim5)T/2)$$
+<p><span class="exp">电容滤波使输出电压升高，纹波减小，但负载能力差</span></p>
+<p><span class="kp">电感滤波</span>：电感与负载串联，滤除纹波。适用于大电流场合。</p>
+
+<h2 id="s34136446">11.2 线性稳压电路</h2>
+<h3 id="s32992368">串联反馈式稳压电路 <span class="tag-must">必考</span></h3>
+<p><span class="kp">稳压原理</span>：电压串联负反馈，稳定输出电压。</p>
+<p><span class="kp">输出电压</span>：</p>
+$$V_O = \left(1 + \frac{R_2}{R_1}\right)V_{REF}$$
+<p><span class="exp">通过改变 $R_1$、$R_2$ 的比值可以调节输出电压</span></p>
+
+<h3 id="s86385662">低压差稳压器（LDO） <span class="tag-key">重点</span></h3>
+<p><span class="kp">特点</span>：使用PMOS管，输入输出压差很小（可低至0.1V），效率高。</p>
+
+<h3 id="s17756038">集成稳压器 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">固定输出</span>：78XX（正电压）、79XX（负电压）</p>
+<p><span class="kp">可调输出</span>：LM317（正电压）、LM337（负电压）</p>
+
+<h2 id="s10743950">11.3 开关稳压电路</h2>
+<p><strong>动机</strong>：线性稳压电路效率低（调整管功耗大），需要高效率的稳压电路。</p>
+
+<h3 id="s81591955">开关稳压电路的特点 <span class="tag-key">重点</span></h3>
+<table>
+<tr><th>特点</th><th>说明</th></tr>
+<tr><td>效率高</td><td>75%~95%，调整管工作在开关状态</td></tr>
+<tr><td>体积小</td><td>省去工频变压器</td></tr>
+<tr><td>稳压范围宽</td><td>对电网要求不高</td></tr>
+<tr><td>纹波较大</td><td>输出有高频纹波</td></tr>
+</table>
+
+<h3 id="s38697568">开关DC/DC变换器 <span class="tag-must">必考</span></h3>
+<p><span class="kp">降压型（Buck）</span>：</p>
+$$V_O = qV_I \quad (q = t_{on}/T)$$
+<p><span class="exp">$q$ 为占空比，通过调节占空比实现稳压</span></p>
+<p><span class="kp">升压型（Boost）</span>：$V_O > V_I$</p>
+<p><span class="kp">极性反转型</span>：$V_O$ 极性与 $V_I$ 相反</p>
+
+
+
+</body>
+</html>

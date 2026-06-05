@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第十一章 直流电源电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第十一章 直流电源电路</h1>
+<h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">本测试共28题，满分100分，建议用时30分钟</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+
+<script>
+var Q = [{"type": "choice", "points": 2, "question": "单相桥式整流电路的负载电压平均值为？", "options": ["$0.45V_2$", "$0.9V_2$", "$1.2V_2$", "$V_2$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：桥式整流电路 $V_L = 0.9V_2$，半波整流为 $0.45V_2$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "电容滤波电路的输出电压约为？", "options": ["$0.9V_2$", "$1.2V_2$", "$1.4V_2$", "$2V_2$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：电容滤波时 $V_L = 1.2V_2$（当 $\\tau_d \\geq (3\\sim5)T/2$）。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "串联反馈式稳压电路的稳压原理是？", "options": ["正反馈", "负反馈", "无反馈", "前馈"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：串联反馈式稳压电路利用电压串联负反馈稳定输出电压。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "开关稳压电路的优点是？", "options": ["纹波小", "效率高", "电路简单", "输出稳定"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：开关稳压电路调整管工作在开关状态，效率高（75%~95%）。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "Buck变换器是？", "options": ["升压电路", "降压电路", "极性反转电路", "线性稳压电路"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：Buck变换器是降压型DC/DC变换器，$V_O = qV_I < V_I$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "LDO的特点是？", "options": ["效率低", "压差大", "效率高，压差小", "纹波大"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：LDO使用PMOS管，输入输出压差很小（可低至0.1V），效率高。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "78XX系列是？", "options": ["负电压输出", "正电压输出", "可调输出", "开关稳压器"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：78XX是固定正电压输出稳压器，79XX是固定负电压输出。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "直流电源的组成顺序是？", "options": ["整流→变压器→滤波→稳压", "变压器→整流→滤波→稳压", "滤波→整流→变压器→稳压", "稳压→整流→滤波→变压器"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：直流电源组成：变压器（降压）→整流（交流变脉动直流）→滤波（减小纹波）→稳压（稳定输出）。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "开关稳压电路通过什么方式实现稳压？", "options": ["调节电阻", "调节占空比", "调节频率", "调节电感"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：开关稳压电路通过脉宽调制（PWM）调节占空比实现稳压。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "Boost变换器的输出电压？", "options": ["小于输入电压", "等于输入电压", "大于输入电压", "与输入电压无关"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：Boost变换器是升压型DC/DC变换器，$V_O > V_I$。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "半波整流电路的效率比桥式整流高。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：桥式整流效率是半波整流的两倍（$V_L = 0.9V_2$ vs $0.45V_2$）。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "电容滤波电路的负载能力比电感滤波强。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：电容滤波负载能力差（负载电流增大，输出电压下降明显），电感滤波负载能力强。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "串联反馈式稳压电路的输出电压可以调节。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：$V_O = (1 + R_2/R_1)V_{REF}$，改变电阻比值可以调节输出电压。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "开关稳压电路的调整管工作在线性区。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：开关稳压电路调整管工作在开关状态（截止和饱和），不是线性区。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "Buck变换器的输出电压与占空比成正比。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：$V_O = qV_I$，占空比 $q$ 越大，输出电压越高。", "pitfall": ""}, {"type": "short", "points": 6, "question": "比较电容滤波和电感滤波的特点和适用场合。", "options": [], "answer": "电容滤波：输出电压高（$1.2V_2$），纹波小，但负载能力差（负载电流增大，输出下降明显）。适用于小电流、负载变化不大的场合。电感滤波：输出电压较低（$0.9V_2$），但负载能力强，电流连续。适用于大电流场合。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释串联反馈式稳压电路的工作原理。", "options": [], "answer": "串联反馈式稳压电路：调整管与负载串联，输出电压通过取样电阻分压反馈到比较放大器，与基准电压比较。当输出电压变化时，误差信号控制调整管的压降，使输出电压稳定。例如：$V_O$ 升高 → 反馈电压升高 → 比较放大器输出降低 → 调整管压降增大 → $V_O$ 降低，实现负反馈稳压。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释开关稳压电路的工作原理和优缺点。", "options": [], "answer": "工作原理：调整管工作在开关状态，通过PWM控制导通时间（占空比），经LC滤波后得到稳定直流输出。反馈控制调节占空比，实现稳压。优点：效率高（75%-95%），体积小，稳压范围宽。缺点：输出纹波较大（有高频开关噪声），电路复杂，电磁干扰大。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "试分析直流电源各部分（变压器、整流、滤波、稳压）的作用，并说明如何选择各部分的参数。", "options": [], "answer": "变压器：将220V交流电降压到所需电压值，根据输出电压和电流选择变比和容量。整流：将交流电转换为脉动直流电，桥式整流效率高，选择二极管要考虑最大电流和反向电压。滤波：减小纹波，电容滤波适用于小电流，电感滤波适用于大电流；电容值根据负载电流和允许纹波选择。稳压：稳定输出电压，线性稳压效率低但纹波小，开关稳压效率高但纹波大。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "比较线性稳压电路和开关稳压电路的优缺点，并说明各自的适用场合。", "options": [], "answer": "线性稳压：优点是输出纹波小、噪声低、响应快、电路简单；缺点是效率低（调整管功耗大）、输入输出压差受限。适用场合：对噪声敏感的模拟电路、低功耗场合。开关稳压：优点是效率高（75%-95%）、输入范围宽、可升压/降压；缺点是输出纹波大、电路复杂、电磁干扰大。适用场合：大功率、电池供电、对效率要求高的场合。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 10, "question": "设计一个输出电压为5V、输出电流为1A的直流稳压电源。画出电路图，选择各部分元件参数。", "options": "", "answer": "1. 变压器：二次电压 $V_2 = V_O/1.2 = 5/1.2 = 4.17V$（电容滤波），取5V有效值。容量 $S > V_2 I_L = 5 \\times 1 = 5VA$，取10VA。2. 整流：桥式整流，二极管选择1N4001（1A，50V）。3. 滤波：电容 $C = (3\\sim5)T/(2R_L) = (3\\sim5) \\times 0.02/(2 \\times 5) = 60\\sim100\\mu F$，取100μF/16V。4. 稳压：选用LM7805（5V固定输出），或用运放构成串联反馈式稳压电路。若用开关稳压，选用LM2596-5.0。", "explanation": "", "pitfall": ""}, {"type": "comprehensive", "points": 20, "question": "某串联反馈式稳压电路：$V_{in} = 12V$，$V_O = 5V$，$I_L = 1A$，$V_{REF} = 2.5V$，运放 $A_{vo} = 1000$，$R_1 = 10k\\Omega$。(1)计算 $R_2$；(2)计算调整管的功耗；(3)若输入电压波动±10%，计算输出电压变化；(4)若负载电流从0变化到1A，计算输出电压变化；(5)计算稳压系数。", "options": [], "answer": "(1) $V_O = (1 + R_2/R_1)V_{REF}$，$5 = (1 + R_2/10k) \\times 2.5$，$R_2 = 10k\\Omega$。(2) 调整管功耗 $P_T = (V_{in} - V_O)I_L = (12-5) \\times 1 = 7W$。(3) 输入变化±10%即 $\\Delta V_{in} = \\pm 1.2V$，$\\Delta V_O = \\Delta V_{in}/(A_{vo}F)$，$F = V_{REF}/V_O = 0.5$，$\\Delta V_O = \\pm 1.2/(1000 \\times 0.5) = \\pm 2.4mV$。(4) 负载变化引起的输出变化取决于调整管的输出电阻，理想情况为0。(5) 稳压系数 $S_V = \\Delta V_O/V_O / (\\Delta V_{in}/V_{in}) = 2.4m/5 / (1.2/12) = 0.048\\%$。", "explanation": "", "pitfall": ""}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "tf": "二、判断题", "short": "三、简答题", "essay": "四、问答题", "comprehensive": "五、综合题"}, "section_order": ["choice", "tf", "short", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+
+function build(){
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var s = q.type;
+    if (s !== sec) {
+      sec = s;
+      if (titles[s]) {
+        h += '<h3>' + titles[s] + '</h3>';
+      }
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i+1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+    h += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65+j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + q.explanation + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+
+  // Re-render MathJax for dynamically inserted formulas
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('selected');
+  }
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) {
+    target.classList.add('selected');
+  }
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      if (radio && parseInt(radio.value) === q.answer) {
+        score += q.points;
+        card.classList.add('correct');
+        badge.className = 'badge badge-ok';
+        badge.textContent = LABELS.correct_label;
+        correctEl.innerHTML = '';
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong');
+        badge.className = 'badge badge-no';
+        badge.textContent = LABELS.wrong_label;
+        var ansText = q.type === 'choice'
+          ? String.fromCharCode(65+q.answer) + '. ' + (q.options ? q.options[q.answer] : '')
+          : (q.answer === 0 ? LABELS.true_label : LABELS.false_label);
+        correctEl.innerHTML = LABELS.answer_prefix + ansText;
+        if (radio) {
+          var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+          if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+        }
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      }
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) tas[i].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = LABELS.graded_label;
+  }
+
+  // Re-render MathJax for revealed explanations
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+</script>
+</body>
+</html>

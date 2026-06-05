@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第七章 模拟集成电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第七章 模拟集成电路</h1>
+<h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">本测试共28题，满分100分，建议用时30分钟</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+
+<script>
+var Q = [{"type": "choice", "points": 2, "question": "差分放大电路抑制共模信号的关键是？", "options": ["高增益", "电路对称性和电流源高内阻", "负反馈", "高输入电阻"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：差分放大电路通过对称结构和高内阻电流源来抑制共模信号。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "共模抑制比 $K_{CMR}$ 等于？", "options": ["$A_{vd} \\times A_{vc}$", "$A_{vd}/A_{vc}$", "$A_{vc}/A_{vd}$", "$A_{vd} + A_{vc}$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：$K_{CMR} = |A_{vd}/A_{vc}|$，表示差模增益与共模增益的比值。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "镜像电流源的作用是？", "options": ["放大信号", "提供稳定偏置电流", "滤波", "整流"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：镜像电流源提供稳定的偏置电流，也可以作为有源负载。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "差模信号是指？", "options": ["两输入端信号相同", "两输入端信号相反", "单端输入信号", "共模信号"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：差模信号是两个输入端信号大小相等、极性相反。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "有源负载差分放大电路的优点是？", "options": ["电路简单", "电压增益高", "功耗低", "带宽宽"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：有源负载可以大大提高电压增益，单端输出增益与双端输出相同。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "运放的转换速率 $SR$ 限制了什么？", "options": ["小信号带宽", "大信号处理能力", "输入电阻", "输出电阻"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：$SR$ 限制了运放处理大信号的能力，$SR$ 越大，高频大信号性能越好。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "差分放大电路的差模输入电阻等于？", "options": ["$r_{\\pi}$", "$2r_{\\pi}$", "$\\beta r_{\\pi}$", "$r_{\\pi}/2$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：差模输入电阻 $R_{id} = 2r_{\\pi}$（双端输入）。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "输入失调电压 $V_{IO}$ 的定义是？", "options": ["使输出为零的输入电压", "使输出为零时加的补偿电压", "输入偏置电压", "输入共模电压"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：$V_{IO}$ 是使输出为零时，在输入端加的补偿电压。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "差分放大电路的共模增益理想情况下等于？", "options": ["0", "1", "$A_{vd}$", "$\\infty$"], "answer": 0, "explanation": "<strong>正确答案</strong>：A。<br><br><strong>解析</strong>：理想情况下，差分放大电路完全对称，共模增益 $A_{vc} = 0$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "电流源的内阻越大，差分放大电路的？", "options": ["差模增益越大", "共模增益越小", "输入电阻越小", "输出电阻越小"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：电流源内阻越大，对共模信号的负反馈越强，共模增益越小。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "差分放大电路可以抑制零点漂移。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：差分放大电路通过对称结构，可以抑制温度变化等引起的零点漂移。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "共模信号是两个输入端信号大小相等、极性相反。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：共模信号是两个输入端信号大小相等、极性相同；差模信号才是大小相等、极性相反。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "镜像电流源的输出电流与参考电流相等。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：对于参数完全相同的镜像电流源，$I_O = I_{REF}$。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "有源负载可以提高放大电路的电压增益。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：有源负载的交流电阻很大，可以大大提高电压增益。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "差分放大电路的共模抑制比越大越好。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：$K_{CMR}$ 越大，抑制共模干扰的能力越强。", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释差分放大电路抑制共模信号的原理。", "options": [], "answer": "差分放大电路通过对称结构抑制共模信号：1. 电路完全对称时，共模信号在两个输出端产生相同的变化，双端输出时相互抵消。2. 电流源的内阻对共模信号形成强负反馈，使共模增益很小。3. 共模抑制比 $K_{CMR} = |A_{vd}/A_{vc}|$，电流源内阻越大，$K_{CMR}$ 越大。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "比较差分放大电路的差模和共模特性。", "options": [], "answer": "差模特性：差模增益高，$A_{vd} = -g_m R_D$（单端减半）；差模输入电阻 $R_{id} = 2r_{\\pi}$；差模输出电阻 $R_{od} = 2R_D$。共模特性：共模增益很小，理想情况 $A_{vc} = 0$；共模输入电阻很大；共模抑制比 $K_{CMR}$ 反映抑制共模干扰的能力。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释运放的转换速率 $SR$ 的含义和影响。", "options": [], "answer": "转换速率 $SR$ 是运放输出电压的最大变化速率，单位 V/μs。$SR$ 限制了运放处理大信号的能力：当输入信号变化率超过 $SR$ 时，输出不能跟随输入变化，产生失真。$SR$ 越大，高频大信号性能越好。例如：处理10MHz、1V的正弦信号，需要 $SR > 2\\pi \\times 10 \\times 1 = 62.8V/\\mu s$。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释镜像电流源的工作原理。", "options": [], "answer": "镜像电流源：两个参数完全相同的晶体管（BJT或MOSFET），$V_{BE}$（或 $V_{GS}$）相同。参考电流 $I_{REF}$ 流过一个管子，产生 $V_{BE}$；另一个管子在相同的 $V_{BE}$ 下，产生相同的电流 $I_O$。因此 $I_O \\approx I_{REF}$，就像镜像一样。输出电流与负载无关，具有恒流特性。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "试分析差分放大电路的工作原理，并说明为什么它能抑制零点漂移。", "options": [], "answer": "差分放大电路由两个对称的放大电路组成，共用偏置电流源。差模信号：两输入端信号相反，两管电流一增一减，双端输出叠加。共模信号：两输入端信号相同，两管电流同增同减，双端输出抵消。抑制零点漂移的原理：温度变化等引起两管电流同向变化（相当于共模信号），由于电路对称，双端输出时相互抵消，从而抑制零点漂移。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "解释为什么有源负载可以提高放大电路的电压增益，并分析其优缺点。", "options": [], "answer": "有源负载用电流源代替电阻作为负载。电流源的交流电阻很大（理想情况无穷大），根据 $A_v = -g_m R_L$，负载电阻增大，电压增益提高。优点：增益高，单端输出增益与双端输出相同。缺点：电路复杂，需要额外的偏置电路；输出摆幅受限于电流源的饱和电压；频率响应可能变差。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 10, "question": "设计一个差分放大电路，要求差模增益 $|A_{vd}| \\geq 20$，共模抑制比 $K_{CMR} \\geq 60dB$。选择合适的电路结构和元件参数。", "options": [], "answer": "选择BJT差分放大电路，双电源供电（±12V）。取 $I_{EE} = 1mA$，则每管 $I_C = 0.5mA$。$r_{\\pi} = \\beta V_T/I_C = 100 \\times 26/0.5 = 5.2k\\Omega$。取 $R_C = 10k\\Omega$，$A_{vd} = -\\beta R_C/r_{\\pi} = -100 \\times 10/5.2 = -192$，满足要求。电流源内阻 $R_{EE} > 1M\\Omega$，$K_{CMR} = R_{EE}/r_e = 1M/52 = 19200$（约86dB），满足要求。输入电阻 $R_{id} = 2r_{\\pi} = 10.4k\\Omega$。", "explanation": "", "pitfall": ""}, {"type": "comprehensive", "points": 20, "question": "某BJT差分放大电路：$V_{CC} = V_{EE} = 12V$，$I_{EE} = 1mA$，$R_C = 10k\\Omega$，$R_E = 100k\\Omega$，$\\beta = 100$。(1)计算静态工作点；(2)计算差模增益 $A_{vd}$；(3)计算共模增益 $A_{vc}$；(4)计算共模抑制比 $K_{CMR}$；(5)计算差模输入电阻 $R_{id}$。", "options": [], "answer": "(1) 静态：$I_{C1} = I_{C2} = I_{EE}/2 = 0.5mA$，$V_{CE1} = V_{CE2} = V_{CC} - I_C R_C - V_E = 12 - 0.5 \\times 10 - (-0.7) = 7.7V$。(2) $r_{\\pi} = \\beta V_T/I_C = 100 \\times 26/0.5 = 5.2k\\Omega$，$A_{vd} = -\\beta R_C/r_{\\pi} = -100 \\times 10/5.2 = -192$（单端输出为-96）。(3) $A_{vc} = -\\beta R_C/(r_{\\pi} + 2(1+\\beta)R_E) \\approx -R_C/(2R_E) = -10/200 = -0.05$。(4) $K_{CMR} = |A_{vd}/A_{vc}| = 192/0.05 = 3840$（约72dB）。(5) $R_{id} = 2r_{\\pi} = 10.4k\\Omega$。", "explanation": "", "pitfall": ""}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "tf": "二、判断题", "short": "三、简答题", "essay": "四、问答题", "comprehensive": "五、综合题"}, "section_order": ["choice", "tf", "short", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+
+function build(){
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var s = q.type;
+    if (s !== sec) {
+      sec = s;
+      if (titles[s]) {
+        h += '<h3>' + titles[s] + '</h3>';
+      }
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i+1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+    h += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65+j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + q.explanation + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+
+  // Re-render MathJax for dynamically inserted formulas
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('selected');
+  }
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) {
+    target.classList.add('selected');
+  }
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      if (radio && parseInt(radio.value) === q.answer) {
+        score += q.points;
+        card.classList.add('correct');
+        badge.className = 'badge badge-ok';
+        badge.textContent = LABELS.correct_label;
+        correctEl.innerHTML = '';
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong');
+        badge.className = 'badge badge-no';
+        badge.textContent = LABELS.wrong_label;
+        var ansText = q.type === 'choice'
+          ? String.fromCharCode(65+q.answer) + '. ' + (q.options ? q.options[q.answer] : '')
+          : (q.answer === 0 ? LABELS.true_label : LABELS.false_label);
+        correctEl.innerHTML = LABELS.answer_prefix + ansText;
+        if (radio) {
+          var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+          if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+        }
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      }
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) tas[i].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = LABELS.graded_label;
+  }
+
+  // Re-render MathJax for revealed explanations
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+</script>
+</body>
+</html>

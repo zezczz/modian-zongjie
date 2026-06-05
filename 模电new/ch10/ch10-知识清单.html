@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第十章 信号处理与信号产生电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第十章 信号处理与信号产生电路</h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s88163043">10.1 滤波电路的基本概念与分类</a></li>
+  <li><a href="#s20487881">滤波器分类 必考</a></li>
+  <li><a href="#s16898958">有源滤波器 重点</a></li>
+<li><a href="#s67996239">10.2 一阶有源滤波电路</a></li>
+<li><a href="#s22525808">10.3 高阶有源滤波电路</a></li>
+  <li><a href="#s48368040">二阶压控电压源型低通滤波器 必考</a></li>
+<li><a href="#s52053090">10.5 正弦波振荡电路的振荡条件</a></li>
+  <li><a href="#s50395930">振荡条件 必考</a></li>
+  <li><a href="#s74272539">振荡电路组成 重点</a></li>
+<li><a href="#s26752320">10.6 RC正弦波振荡电路</a></li>
+  <li><a href="#s71162708">RC桥式振荡电路 必考</a></li>
+  <li><a href="#s60780091">稳幅措施 高频</a></li>
+<li><a href="#s57603551">10.8 非正弦信号产生电路</a></li>
+  <li><a href="#s41908879">电压比较器 必考</a></li>
+  <li><a href="#s76021037">方波产生电路 重点</a></li>
+  <li><a href="#s22910872">锯齿波产生电路 高频</a></li>
+</ul>
+</div>
+
+<h2 id="s88163043">10.1 滤波电路的基本概念与分类</h2>
+<p><strong>动机</strong>：需要从复杂信号中提取有用频率成分，抑制无用成分。</p>
+<p><span class="kp">滤波器</span>：能使有用频率信号通过，同时抑制或衰减无用频率信号的电子装置。</p>
+
+<h3 id="s20487881">滤波器分类 <span class="tag-must">必考</span></h3>
+<table>
+<tr><th>类型</th><th>通带</th><th>阻带</th><th>应用</th></tr>
+<tr><td>低通（LPF）</td><td>0~$f_H$</td><td>$f > f_H$</td><td>抑制高频干扰</td></tr>
+<tr><td>高通（HPF）</td><td>$f > f_L$</td><td>0~$f_L$</td><td>抑制低频干扰</td></tr>
+<tr><td>带通（BPF）</td><td>$f_L$~$f_H$</td><td>$f < f_L$，$f > f_H$</td><td>选频</td></tr>
+<tr><td>带阻（BRF）</td><td>$f < f_L$，$f > f_H$</td><td>$f_L$~$f_H$</td><td>抑制特定频率</td></tr>
+</table>
+
+<h3 id="s16898958">有源滤波器 <span class="tag-key">重点</span></h3>
+<p><span class="kp">有源滤波器</span>：由有源器件（运放）和RC网络组成的滤波器。</p>
+<p><span class="exp">优点：不用电感，体积小，有一定的电压放大作用。缺点：工作频率受限，不适宜大功率场合。</span></p>
+
+<h2 id="s67996239">10.2 一阶有源滤波电路</h2>
+<p><span class="kp">一阶低通</span>：传递函数 $A(s) = A_0/(1 + s/\omega_c)$</p>
+<p><span class="kp">一阶高通</span>：传递函数 $A(s) = A_0 s/\omega_c/(1 + s/\omega_c)$</p>
+<p><span class="exp">一阶滤波器的带外衰减速率较慢（-20dB/十倍频）</span></p>
+
+<h2 id="s22525808">10.3 高阶有源滤波电路</h2>
+<h3 id="s48368040">二阶压控电压源型低通滤波器 <span class="tag-must">必考</span></h3>
+<p><span class="kp">传递函数</span>：</p>
+$$A(s) = \frac{A_0 \omega_c^2}{s^2 + \frac{\omega_c}{Q}s + \omega_c^2}$$
+<p><span class="exp">$A_0$：通带增益，$\omega_c$：特征角频率，$Q$：品质因数</span></p>
+<p><span class="kp">稳定条件</span>：$A_0 < 3$</p>
+<p><span class="kp">巴特沃斯滤波器</span>：$Q = 0.707$ 时，通带内幅频响应最平坦。</p>
+
+<h2 id="s52053090">10.5 正弦波振荡电路的振荡条件</h2>
+<h3 id="s50395930">振荡条件 <span class="tag-must">必考</span></h3>
+<p><span class="kp">振幅平衡条件</span>：$|AF| = 1$</p>
+<p><span class="kp">相位平衡条件</span>：$\phi_A + \phi_F = 2n\pi$</p>
+<p><span class="kp">起振条件</span>：$|AF| > 1$</p>
+
+<h3 id="s74272539">振荡电路组成 <span class="tag-key">重点</span></h3>
+<ul>
+<li>放大电路</li>
+<li>反馈网络（正反馈）</li>
+<li>选频网络</li>
+<li>稳幅环节</li>
+</ul>
+
+<h2 id="s26752320">10.6 RC正弦波振荡电路</h2>
+<h3 id="s71162708">RC桥式振荡电路 <span class="tag-must">必考</span></h3>
+<p><span class="kp">选频特性</span>：RC串并联网络在 $\omega_0 = 1/(RC)$ 时，反馈系数最大为1/3。</p>
+<p><span class="kp">振荡条件</span>：$A_v = 1 + R_f/R_1 \geq 3$</p>
+<p><span class="kp">振荡频率</span>：$f_0 = 1/(2\pi RC)$</p>
+<p><span class="exp">RC振荡电路用于产生1MHz以下的低频正弦波</span></p>
+
+<h3 id="s60780091">稳幅措施 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">热敏电阻</span>：利用热敏电阻的非线性特性自动调节增益。</p>
+<p><span class="kp">场效应管</span>：利用场效应管的压控电阻特性实现稳幅。</p>
+
+<h2 id="s57603551">10.8 非正弦信号产生电路</h2>
+<h3 id="s41908879">电压比较器 <span class="tag-must">必考</span></h3>
+<p><span class="kp">单门限比较器</span>：只有一个门限电压，输入超过门限输出跳变。</p>
+<p><span class="kp">迟滞比较器</span>：有两个门限电压，抗干扰能力强。</p>
+
+<h3 id="s76021037">方波产生电路 <span class="tag-key">重点</span></h3>
+<p><span class="kp">组成</span>：迟滞比较器 + RC充放电支路 + 稳压管限幅。</p>
+<p><span class="kp">振荡周期</span>：$T = 2RC\ln(1 + 2R_1/R_2)$</p>
+
+<h3 id="s22910872">锯齿波产生电路 <span class="tag-freq">高频</span></h3>
+<p><span class="exp">由同相输入迟滞比较器和积分电路组成，通过不同的充放电时间常数产生锯齿波。</span></p>
+
+
+
+</body>
+</html>

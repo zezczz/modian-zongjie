@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第十章 信号处理与信号产生电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第十章 信号处理与信号产生电路</h1>
+<h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">本测试共28题，满分100分，建议用时30分钟</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+
+<script>
+var Q = [{"type": "choice", "points": 2, "question": "低通滤波器允许通过的信号是？", "options": ["高频信号", "低频信号", "所有信号", "特定频率信号"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：低通滤波器允许低频信号通过，衰减高频信号。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "二阶低通滤波器稳定的条件是？", "options": ["$A_0 > 3$", "$A_0 < 3$", "$A_0 = 3$", "$A_0 = 1$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：二阶压控电压源型低通滤波器要求 $A_0 < 3$ 才能稳定工作。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "巴特沃斯滤波器的特点是？", "options": ["通带内有纹波", "通带内最平坦", "阻带衰减最陡", "相位线性"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：巴特沃斯滤波器（$Q=0.707$）通带内幅频响应最平坦。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "正弦波振荡的相位平衡条件是？", "options": ["$\\phi_A + \\phi_F = 0$", "$\\phi_A + \\phi_F = 180°$", "$\\phi_A + \\phi_F = 360°$", "$\\phi_A + \\phi_F = 2n\\pi$"], "answer": 3, "explanation": "<strong>正确答案</strong>：D。<br><br><strong>解析</strong>：相位平衡条件是 $\\phi_A + \\phi_F = 2n\\pi$（n为整数）。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "RC桥式振荡电路的振荡频率为？", "options": ["$2\\pi RC$", "$1/(2\\pi RC)$", "$RC$", "$1/RC$"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：RC桥式振荡电路振荡频率 $f_0 = 1/(2\\pi RC)$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "迟滞比较器的特点是？", "options": ["只有一个门限", "有两个门限", "无门限", "增益无穷大"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：迟滞比较器有两个门限电压，抗干扰能力强。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "有源滤波器的优点是？", "options": ["工作频率高", "不用电感", "功率大", "成本低"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：有源滤波器用运放代替电感，体积小，成本低。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "方波产生电路的组成是？", "options": ["比较器+积分电路", "迟滞比较器+RC充放电", "运放+电感", "运放+变压器"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：方波产生电路由迟滞比较器、RC充放电支路和稳压管限幅组成。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "RC振荡电路适用于产生？", "options": ["高频信号", "低频信号", "脉冲信号", "直流信号"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：RC振荡电路适用于产生1MHz以下的低频正弦波。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "起振条件是？", "options": ["$|AF| < 1$", "$|AF| = 1$", "$|AF| > 1$", "$|AF| = 0$"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：起振条件是 $|AF| > 1$，使振荡从小信号增长到稳幅。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "二阶低通滤波器的带外衰减速率为？", "options": ["-20dB/十倍频", "-40dB/十倍频", "-60dB/十倍频", "-80dB/十倍频"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：二阶滤波器的带外衰减速率为-40dB/十倍频，比一阶（-20dB/十倍频）更陡。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "带通滤波器允许低频和高频信号通过。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：带通滤波器只允许特定频率范围内的信号通过。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "有源滤波器需要使用电感。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析</strong>：有源滤波器用运放代替电感，不需要电感。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "正弦波振荡电路需要正反馈。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：振荡电路需要正反馈，使信号不断增长直到稳幅。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "迟滞比较器的抗干扰能力比单门限比较器强。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析</strong>：迟滞比较器有两个门限，可以避免在门限附近的反复跳变。", "pitfall": ""}, {"type": "short", "points": 6, "question": "比较低通、高通、带通、带阻滤波器的特点和应用。", "options": [], "answer": "低通：通过低频，衰减高频，用于抑制高频干扰、电源滤波。高通：通过高频，衰减低频，用于抑制低频干扰、直流隔离。带通：通过特定频带，用于选频、通信接收。带阻：衰减特定频带，用于抑制50Hz工频干扰、陷波器。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释正弦波振荡的振幅平衡条件和相位平衡条件。", "options": [], "answer": "振幅平衡条件：$|AF| = 1$，表示环路增益为1，信号经过一圈放大后幅度不变。相位平衡条件：$\\phi_A + \\phi_F = 2n\\pi$，表示信号经过一圈后相移为0°或360°的整数倍，保证正反馈。起振时 $|AF| > 1$，信号逐渐增长；稳幅后 $|AF| = 1$，信号稳定。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释二阶低通滤波器中品质因数 $Q$ 的含义。", "options": [], "answer": "品质因数 $Q$ 反映滤波器在特征频率 $\\omega_c$ 附近的响应特性。$Q$ 越大，$\\omega_c$ 处的增益峰值越明显（过冲）；$Q$ 越小，响应越平坦。$Q = 0.707$ 时（巴特沃斯），通带内最平坦，无过冲。$Q > 0.707$ 时有峰值，$Q < 0.707$ 时过渡带变缓。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释RC桥式振荡电路的工作原理。", "options": [], "answer": "RC桥式振荡电路由同相放大电路和RC串并联选频网络组成。RC网络在 $f_0 = 1/(2\\pi RC)$ 时反馈系数最大（1/3），相移为0°。同相放大电路增益 $A_v = 1 + R_f/R_1$。当 $A_v \\geq 3$ 时，$|AF| \\geq 1$，满足振幅条件；RC网络在 $f_0$ 处相移为0°，满足相位条件，电路在 $f_0$ 处振荡。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "试分析有源滤波器和无源滤波器的优缺点，并说明各自的适用场合。", "options": [], "answer": "无源滤波器：由R、L、C组成，优点是结构简单、功率大、高频特性好；缺点是体积大（需要电感）、选择性差、有损耗。适用于高频、大功率场合。有源滤波器：由运放和RC组成，优点是不用电感、体积小、有电压放大、选择性好；缺点是工作频率受限（运放带宽）、功率小、需要电源。适用于低频信号处理。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "解释迟滞比较器的工作原理，并说明为什么它比单门限比较器抗干扰能力强。", "options": [], "answer": "迟滞比较器通过正反馈实现两个门限电压。当输出为高电平时，上门限 $V_{T+}$ 较高；输出为低电平时，下门限 $V_{T-}$ 较低。输入必须超过 $V_{T+}$ 才能使输出翻转为低，低于 $V_{T-}$ 才能翻转为高。抗干扰能力：输入信号在 $V_{T+}$ 和 $V_{T-}$ 之间变化时，输出不变，可以滤除幅值小于回差电压 $\\Delta V_T = V_{T+} - V_{T-}$ 的干扰。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 10, "question": "设计一个频率为1kHz的RC桥式振荡电路，要求输出电压幅值稳定。选择合适的元件参数，画出电路图。", "options": [], "answer": "振荡频率 $f_0 = 1/(2\\pi RC) = 1kHz$，取 $C = 0.01\\mu F$，则 $R = 1/(2\\pi f_0 C) = 1/(2\\pi \\times 1000 \\times 0.01 \\times 10^{-6}) = 15.9k\\Omega$，取标准值16kΩ。放大电路：同相放大，$R_1 = 10k\\Omega$，$R_f = 20k\\Omega$（用热敏电阻实现稳幅），$A_v = 1 + R_f/R_1 = 3$。稳幅：$R_f$ 用正温度系数热敏电阻，当输出增大时，$R_f$ 增大，$A_v$ 减小，实现稳幅。", "explanation": "", "pitfall": ""}, {"type": "comprehensive", "points": 20, "question": "某二阶低通滤波器：$R_1 = R_2 = 10k\\Omega$，$C_1 = C_2 = 0.01\\mu F$，运放构成同相放大电路，$R_3 = 10k\\Omega$，$R_f = 5k\\Omega$。(1)计算特征频率 $f_c$；(2)计算通带增益 $A_0$；(3)计算品质因数 $Q$；(4)判断滤波器类型（巴特沃斯/切比雪夫）；(5)计算10kHz处的增益。", "options": [], "answer": "(1) $f_c = 1/(2\\pi RC) = 1/(2\\pi \\times 10k \\times 0.01\\mu) = 1592Hz$。(2) $A_0 = 1 + R_f/R_3 = 1 + 5/10 = 1.5$。(3) 对于压控电压源型，$Q = 1/(3 - A_0) = 1/(3 - 1.5) = 0.667$。(4) $Q = 0.667 \\approx 0.707$，接近巴特沃斯特性。(5) $f = 10kHz$ 时，$A(j\\omega) = A_0/(1 - (f/f_c)^2 + j(f/f_c)/Q)$，$|A| = 1.5/\\sqrt{(1-39.5)^2 + (39.5/0.667)^2} = 1.5/39.5 = 0.038$（约-28dB）。", "explanation": "", "pitfall": ""}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "tf": "二、判断题", "short": "三、简答题", "essay": "四、问答题", "comprehensive": "五、综合题"}, "section_order": ["choice", "tf", "short", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+
+function build(){
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var s = q.type;
+    if (s !== sec) {
+      sec = s;
+      if (titles[s]) {
+        h += '<h3>' + titles[s] + '</h3>';
+      }
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i+1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+    h += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65+j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + q.explanation + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+
+  // Re-render MathJax for dynamically inserted formulas
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('selected');
+  }
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) {
+    target.classList.add('selected');
+  }
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      if (radio && parseInt(radio.value) === q.answer) {
+        score += q.points;
+        card.classList.add('correct');
+        badge.className = 'badge badge-ok';
+        badge.textContent = LABELS.correct_label;
+        correctEl.innerHTML = '';
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong');
+        badge.className = 'badge badge-no';
+        badge.textContent = LABELS.wrong_label;
+        var ansText = q.type === 'choice'
+          ? String.fromCharCode(65+q.answer) + '. ' + (q.options ? q.options[q.answer] : '')
+          : (q.answer === 0 ? LABELS.true_label : LABELS.false_label);
+        correctEl.innerHTML = LABELS.answer_prefix + ansText;
+        if (radio) {
+          var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+          if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+        }
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      }
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) tas[i].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = LABELS.graded_label;
+  }
+
+  // Re-render MathJax for revealed explanations
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+</script>
+</body>
+</html>

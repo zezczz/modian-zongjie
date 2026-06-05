@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第六章 频率响应</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第六章 频率响应</h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s60262991">6.1 单时间常数RC电路的频率响应</a></li>
+  <li><a href="#s85140232">RC低通电路 重点</a></li>
+  <li><a href="#s37861178">RC高通电路 重点</a></li>
+<li><a href="#s28676500">6.2 单管放大电路的低频响应</a></li>
+<li><a href="#s17196879">6.3 单管放大电路的高频响应</a></li>
+  <li><a href="#s76921071">密勒效应 必考</a></li>
+  <li><a href="#s62224042">增益-带宽积 必考</a></li>
+<li><a href="#s86414647">6.4 扩展放大电路通频带的方法</a></li>
+<li><a href="#s71675221">6.5 多级放大电路的频率响应</a></li>
+</ul>
+</div>
+
+<h2 id="s60262991">6.1 单时间常数RC电路的频率响应</h2>
+<p><strong>动机</strong>：实际电路中存在电容，影响电路的频率特性。</p>
+
+<h3 id="s85140232">RC低通电路 <span class="tag-key">重点</span></h3>
+<p><span class="kp">传递函数</span>：</p>
+$$A(j\omega) = \frac{1}{1 + j\omega/\omega_H}$$
+<p><span class="kp">上限截止频率</span>：</p>
+$$\omega_H = \frac{1}{RC} \quad \text{或} \quad f_H = \frac{1}{2\pi RC}$$
+<p><span class="exp">当 $f = f_H$ 时，增益下降到通带增益的 $1/\sqrt{2}$（-3dB）</span></p>
+
+<h3 id="s37861178">RC高通电路 <span class="tag-key">重点</span></h3>
+<p><span class="kp">传递函数</span>：</p>
+$$A(j\omega) = \frac{1}{1 - j\omega_L/\omega}$$
+<p><span class="kp">下限截止频率</span>：</p>
+$$\omega_L = \frac{1}{RC} \quad \text{或} \quad f_L = \frac{1}{2\pi RC}$$
+
+<h2 id="s28676500">6.2 单管放大电路的低频响应</h2>
+<p><span class="exp">低频时，耦合电容和旁路电容的阻抗增大，不能再视为短路。</span></p>
+<p><span class="kp">短路时间常数法</span>：求每个电容单独作用时的时间常数，估算下限频率。</p>
+
+<h2 id="s17196879">6.3 单管放大电路的高频响应</h2>
+<p><span class="exp">高频时，三极管极间电容的阻抗减小，不能再视为开路。</span></p>
+
+<h3 id="s76921071">密勒效应 <span class="tag-must">必考</span></h3>
+<p><span class="kp">密勒电容</span>：</p>
+$$C_M = (1 + g_m R_L')C_{gd}$$
+<p><span class="exp">跨接在输入输出之间的电容 $C_{gd}$，在输入端等效为 $(1 + A_v)C_{gd}$，大大增加了输入电容</span></p>
+
+<p><span class="kp">上限截止频率</span>：</p>
+$$f_H = \frac{1}{2\pi R_{eq}C_{eq}}$$
+
+<h3 id="s62224042">增益-带宽积 <span class="tag-must">必考</span></h3>
+<p><span class="kp">增益-带宽积</span>：$|A_{vsM}| \cdot f_H = $ 常数</p>
+<p><span class="exp">提高增益会使带宽变窄，降低增益可以增加带宽</span></p>
+
+<h2 id="s86414647">6.4 扩展放大电路通频带的方法</h2>
+<p><span class="kp">共源-共基电路</span>：减小密勒电容，提高上限频率。</p>
+<p><span class="kp">共集-共射电路</span>：减小输入回路时间常数，提高上限频率。</p>
+
+<h2 id="s71675221">6.5 多级放大电路的频率响应</h2>
+<p><span class="kp">总增益</span>：多级放大电路的总增益为各级增益的乘积。</p>
+<p><span class="kp">带宽</span>：多级放大电路的带宽比单级窄。</p>
+
+
+
+</body>
+</html>

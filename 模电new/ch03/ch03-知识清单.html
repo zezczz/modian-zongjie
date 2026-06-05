@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第三章 二极管及其基本电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第三章 二极管及其基本电路</h1>
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#s87090675">3.1 半导体的基本知识</a></li>
+  <li><a href="#s72443488">本征半导体 重点</a></li>
+  <li><a href="#s83268498">杂质半导体 必考</a></li>
+<li><a href="#s83508369">3.2 PN结的形成及特性</a></li>
+  <li><a href="#s12213621">PN结的形成 必考</a></li>
+  <li><a href="#s62567815">PN结的单向导电性 必考</a></li>
+  <li><a href="#s55375310">PN结的反向击穿 高频</a></li>
+<li><a href="#s20230752">3.3 二极管</a></li>
+<li><a href="#s89782289">3.4 二极管基本电路及其分析方法</a></li>
+  <li><a href="#s54512235">二极管模型 必考</a></li>
+  <li><a href="#s84790595">整流电路 必考</a></li>
+<li><a href="#s53570609">3.5 特殊二极管</a></li>
+</ul>
+</div>
+
+<h2 id="s87090675">3.1 半导体的基本知识</h2>
+<p><strong>动机</strong>：需要了解半导体材料的特性，才能理解二极管、三极管等器件的工作原理。</p>
+<p><span class="kp">半导体材料</span>：硅(Si)、锗(Ge)、砷化镓(GaAs)等，导电能力介于导体和绝缘体之间。</p>
+
+<h3 id="s72443488">本征半导体 <span class="tag-key">重点</span></h3>
+<p><span class="kp">本征半导体</span>：完全纯净、结构完整的半导体晶体。</p>
+<p><span class="kp">载流子</span>：自由电子和空穴，成对出现（本征激发）。</p>
+<p><span class="kp">温度影响</span>：温度升高，载流子浓度增加，导电能力增强。</p>
+
+<h3 id="s83268498">杂质半导体 <span class="tag-must">必考</span></h3>
+<table>
+<tr><th>类型</th><th>掺杂</th><th>多数载流子</th><th>少数载流子</th></tr>
+<tr><td><span class="kp">N型半导体</span></td><td>五价元素（磷）</td><td>自由电子</td><td>空穴</td></tr>
+<tr><td><span class="kp">P型半导体</span></td><td>三价元素（硼）</td><td>空穴</td><td>自由电子</td></tr>
+</table>
+<blockquote>易错：N型半导体中自由电子是多数载流子，但整体仍呈电中性（施主原子带正电，自由电子带负电）。</blockquote>
+
+<h2 id="s83508369">3.2 PN结的形成及特性</h2>
+<h3 id="s12213621">PN结的形成 <span class="tag-must">必考</span></h3>
+<p><span class="kp">扩散运动</span>：由载流子浓度差引起的运动。</p>
+<p><span class="kp">漂移运动</span>：在电场作用下引起的载流子运动。</p>
+<p><span class="kp">空间电荷区</span>：多子扩散和少子漂移达到动态平衡后形成的区域，也称为耗尽层、势垒区。</p>
+
+<h3 id="s62567815">PN结的单向导电性 <span class="tag-must">必考</span></h3>
+<table>
+<tr><th>偏置</th><th>电阻</th><th>电流</th><th>载流子</th></tr>
+<tr><td><span class="kp">正向偏置</span></td><td>低</td><td>大（扩散电流）</td><td>多子</td></tr>
+<tr><td><span class="kp">反向偏置</span></td><td>高</td><td>小（漂移电流）</td><td>少子</td></tr>
+</table>
+<p><span class="kp">I-V特性</span>：</p>
+$$i = I_S(e^{v/V_T} - 1)$$
+<p><span class="exp">$I_S$ 为反向饱和电流，$V_T = kT/q \approx 26mV$（常温）</span></p>
+
+<h3 id="s55375310">PN结的反向击穿 <span class="tag-freq">高频</span></h3>
+<p><span class="kp">雪崩击穿</span>：载流子倍增效应，发生在掺杂浓度低的PN结。</p>
+<p><span class="kp">齐纳击穿</span>：强电场破坏共价键，发生在掺杂浓度高的PN结。</p>
+<blockquote>易错：反向击穿不一定是不可逆的。电击穿（雪崩、齐纳）是可逆的，热击穿是不可逆的。</blockquote>
+
+<h2 id="s20230752">3.3 二极管</h2>
+<p><span class="kp">结构</span>：点接触型（结电容小，高频）和面接触型（结电容大，整流）。</p>
+<p><span class="kp">I-V特性</span>：正向特性（门坎电压 $V_{th}$）、反向特性（反向饱和电流）、反向击穿特性。</p>
+
+<h2 id="s89782289">3.4 二极管基本电路及其分析方法</h2>
+<h3 id="s54512235">二极管模型 <span class="tag-must">必考</span></h3>
+<table>
+<tr><th>模型</th><th>正向</th><th>反向</th><th>适用场合</th></tr>
+<tr><td>理想模型</td><td>短路</td><td>开路</td><td>定性分析</td></tr>
+<tr><td>恒压降模型</td><td>$V_D = 0.7V$</td><td>开路</td><td>一般计算</td></tr>
+<tr><td>小信号模型</td><td>$r_d = V_T/I_D$</td><td>-</td><td>小信号分析</td></tr>
+</table>
+
+<h3 id="s84790595">整流电路 <span class="tag-must">必考</span></h3>
+<p><span class="kp">半波整流</span>：负载平均电压 $V_L \approx 0.45V_2$</p>
+<p><span class="kp">桥式整流</span>：负载平均电压 $V_L \approx 0.9V_2$</p>
+
+<h2 id="s53570609">3.5 特殊二极管</h2>
+<p><span class="kp">齐纳二极管</span>：利用反向击穿特性稳压。</p>
+<p><span class="kp">变容二极管</span>：结电容随反向电压变化。</p>
+<p><span class="kp">肖特基二极管</span>：正向压降低，开关速度快。</p>
+<p><span class="kp">光电二极管</span>：光转换为电。</p>
+<p><span class="kp">发光二极管</span>：电转换为光。</p>
+
+
+
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第三章 二极管及其基本电路</title>
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\(', '\)']],
+    displayMath: [['$$', '$$'], ['\[', '\]']]
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+/* === ExamPass Shared Styles === */
+/* Paper-like warm background, clean typography, responsive */
+
+:root {
+  --paper: #fdf6e3;
+  --paper-dark: #f5ecd7;
+  --ink: #2c2c2c;
+  --ink-light: #555;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --divider: #d6c8a8;
+  --card-bg: #fef9ef;
+  --card-border: #e8dcc8;
+  --correct: #22c55e;
+  --correct-bg: #f0fdf4;
+  --wrong: #ef4444;
+  --wrong-bg: #fef2f2;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 860px; margin: auto; padding: 24px 20px 60px;
+  background: var(--paper);
+}
+
+@media print {
+  body { font-size: 10.5pt; background: #fff; }
+  .no-print { display: none !important; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ── Header ── */
+#exampass-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 6px 0; margin-bottom: 0;
+}
+.header-brand { font-size: 1.2em; font-weight: 700; color: #1a1a2e; letter-spacing: 0.3px; }
+.header-url  { font-size: 0.78em; color: #999; }
+.header-divider { border: none; border-top: 2px solid var(--divider); margin: 4px 0 20px 0; }
+
+/* ── Typography ── */
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; margin-top: 0; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; color: var(--ink); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Tables ── */
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+
+/* ── Knowledge point vs explanation ── */
+.kp { font-weight: 700; color: var(--ink); }           /* key point: bold dark */
+.exp { font-weight: 400; color: var(--ink-light); }    /* explanation: lighter */
+.exp em, .exp strong { color: var(--ink); }             /* emphasis inside explanation */
+
+/* ── Block elements ── */
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+
+/* ── TOC ── */
+div.toc {
+  background: var(--card-bg); padding: 14px 18px;
+  border: 1px solid var(--card-border); border-radius: var(--radius); margin-bottom: 22px;
+}
+div.toc ul { padding-left: 18px; }
+div.toc li { margin: 3px 0; font-size: 0.95em; }
+
+/* ── Priority tags ── */
+.tag-must   { background: #fee2e2; color: #991b1b; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-key    { background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-freq   { background: #dbeafe; color: #1e40af; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+.tag-info   { background: #f0fdf4; color: #166534; padding: 1px 6px; border-radius: 3px; font-size: 0.82em; font-weight: 600; }
+
+/* === Interactive Test Styles === */
+
+/* ── Score box ── */
+#score-box {
+  display: none; background: var(--paper-dark); color: var(--ink);
+  padding: 16px 20px; border-radius: var(--radius); margin: 14px 0;
+  text-align: center; border: 1px solid var(--card-border);
+}
+#score-box .score-num { font-size: 2.2em; font-weight: 700; }
+#score-box .score-label { font-size: 0.85em; color: var(--ink-light); }
+
+/* ── Question card ── */
+.q-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 12px 14px; margin: 10px 0;
+  transition: all 0.15s;
+}
+.q-card.correct { border-left: 3px solid var(--correct); background: #f7fdf4; }
+.q-card.wrong   { border-left: 3px solid var(--wrong); background: #fef9f9; }
+
+.q-num  { font-weight: 700; font-size: 0.98em; margin-bottom: 4px; }
+.q-text { margin-bottom: 8px; font-size: 0.98em; }
+
+/* ── Options (compact) ── */
+.option {
+  display: block; padding: 4px 10px; margin: 3px 0;
+  border: 1px solid var(--card-border); border-radius: 4px;
+  cursor: pointer; transition: all 0.12s; font-size: 0.93em;
+  background: #fefcf5;
+}
+.option:hover            { background: #f0ede0; }
+.option input            { margin-right: 6px; }
+.option.selected         { border-color: var(--accent); background: #eff6ff; }
+.option.correct-answer   { border-color: var(--correct); background: var(--correct-bg); }
+.option.wrong-answer     { border-color: var(--wrong); background: var(--wrong-bg); }
+
+/* ── Textareas (compact) ── */
+.q-textarea {
+  width: 100%; min-height: 56px; border: 1px solid var(--card-border);
+  border-radius: 4px; padding: 6px 10px; font-family: inherit;
+  font-size: 0.93em; background: #fefcf5; resize: vertical;
+}
+.q-textarea:focus { outline: none; border-color: var(--accent); }
+
+/* ── Result after grading ── */
+.result {
+  display: none; margin-top: 8px; padding: 8px 12px;
+  background: #fefcf5; border: 1px solid var(--card-border);
+  border-radius: 4px; font-size: 0.9em; line-height: 1.6;
+}
+.result .badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-weight: 700; font-size: 0.82em; margin-right: 6px;
+}
+.badge-ok  { background: var(--correct-bg); color: #166534; }
+.badge-no  { background: var(--wrong-bg); color: #991b1b; }
+.badge-ref { background: #dbeafe; color: #1e40af; }
+
+.result .explanation { margin-top: 4px; color: var(--ink); }
+.result .pitfall { color: #b45309; margin-top: 3px; font-size: 0.9em; }
+
+/* ── Grading button ── */
+.grading-bar { text-align: center; margin: 20px 0; }
+.grading-bar button {
+  font-size: 1em; padding: 8px 32px; background: var(--accent);
+  color: #fff; border: none; border-radius: var(--radius);
+  cursor: pointer; font-weight: 600; letter-spacing: 0.3px;
+}
+.grading-bar button:hover     { background: var(--accent-hover); }
+.grading-bar button:disabled  { background: #bbb; cursor: not-allowed; }
+
+</style>
+</head>
+<body>
+
+<header id="exampass-header">
+  <div class="header-left"><span class="header-brand">ExamPass Assistant</span></div>
+  <div class="header-right"><span class="header-url">github.com/WUBING2023/ExamPass-Assistant</span></div>
+</header>
+<hr class="header-divider">
+
+<h1>第三章 二极管及其基本电路</h1>
+<h2 style="text-align:center">章节测试</h2>
+<p style="text-align:center;color:var(--ink-light);font-size:0.95em">本测试共28题，满分100分，建议用时30分钟</p>
+
+<div id="score-box"><div class="score-num" id="score-num">0</div><div class="score-label">总分</div></div>
+<div id="questions-container"></div>
+<div class="grading-bar no-print"><button onclick="gradeAll()" id="grade-btn">提交批改</button></div>
+
+<script>
+var Q = [{"type": "choice", "points": 2, "question": "N型半导体中的多数载流子是？", "options": ["空穴", "自由电子", "正离子", "负离子"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：N型半导体掺入五价元素（如磷），自由电子是多数载流子，空穴是少数载流子。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "PN结正向偏置时，呈现？", "options": ["高电阻，小电流", "低电阻，大电流", "高电阻，大电流", "低电阻，小电流"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：PN结正向偏置时，内电场被削弱，多子扩散增强，呈现低电阻、大电流。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "二极管恒压降模型中，硅管的正向压降约为？", "options": ["0.2V", "0.3V", "0.7V", "1V"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：硅二极管的正向压降约为0.7V，锗二极管约为0.2V-0.3V。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "半波整流电路的负载平均电压约为？", "options": ["$0.45V_2$", "$0.9V_2$", "$V_2$", "$1.414V_2$"], "answer": 0, "explanation": "<strong>正确答案</strong>：A。<br><br><strong>解析</strong>：半波整流电路的负载平均电压 $V_L \\approx 0.45V_2$，桥式整流约为 $0.9V_2$。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "齐纳二极管稳压时工作在？", "options": ["正向导通区", "反向截止区", "反向击穿区", "饱和区"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析</strong>：齐纳二极管利用反向击穿特性稳压，工作在反向击穿区。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "常温下（T=300K），热电压 $V_T$ 约为？", "options": ["2.6mV", "26mV", "260mV", "2.6V"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：热电压 $V_T = kT/q \\approx 26mV$（常温T=300K）。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "PN结的空间电荷区也称为？", "options": ["导电区", "耗尽层", "基区", "集电区"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：PN结的空间电荷区也称为耗尽层、势垒区，因为该区域的载流子被耗尽。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "二极管理想模型中，正向偏置时二极管相当于？", "options": ["开路", "短路", "电阻", "电容"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析</strong>：二极管理想模型中，正向偏置时相当于短路（$V_D = 0$），反向偏置时相当于开路。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "二极管小信号模型中的微变电阻 $r_d$ 与什么有关？", "options": ["与静态工作点无关", "与静态工作点有关", "只与温度有关", "只与频率有关"], "answer": 1, "explanation": "<strong>正确答案</strong>：B。<br><br><strong>解析**：$r_d = V_T/I_D$，与静态工作点 $I_D$ 有关，$I_D$ 越大，$r_d$ 越小。", "pitfall": ""}, {"type": "choice", "points": 2, "question": "P型半导体中掺入的是？", "options": ["五价元素", "四价元素", "三价元素", "二价元素"], "answer": 2, "explanation": "<strong>正确答案</strong>：C。<br><br><strong>解析**：P型半导体掺入三价元素（如硼），产生空穴作为多数载流子。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "本征半导体中自由电子和空穴成对出现。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析**：本征激发产生自由电子和空穴，两者成对出现，称为电子-空穴对。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "PN结反向偏置时，电流主要由多子扩散形成。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析**：PN结反向偏置时，电流主要由少子漂移形成，而不是多子扩散。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "N型半导体整体带负电。", "options": [], "answer": 1, "explanation": "<strong>正确答案</strong>：错误。<br><br><strong>解析**：N型半导体整体呈电中性，施主原子带正电，自由电子带负电，电荷平衡。", "pitfall": "易错点：N型半导体中自由电子多，但整体不带电。"}, {"type": "tf", "points": 1, "question": "二极管的反向饱和电流与温度有关。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析**：反向饱和电流 $I_S$ 随温度升高而增大，温度每升高10℃，$I_S$ 约增大一倍。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "桥式整流电路的负载平均电压是半波整流的两倍。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析**：桥式整流 $V_L \\approx 0.9V_2$，半波整流 $V_L \\approx 0.45V_2$，前者是后者的两倍。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "齐纳击穿是可逆的，热击穿是不可逆的。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析**：齐纳击穿和雪崩击穿属于电击穿，是可逆的；热击穿会导致器件永久损坏，是不可逆的。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "二极管的门坎电压 $V_{th}$ 等于导通电压。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析**：门坎电压（死区电压）$V_{th}$ 是二极管开始导通的电压，硅管约0.5V，锗管约0.1V。导通后正向压降硅管约0.7V，锗管约0.2-0.3V。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "点接触型二极管适用于高频电路。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析**：点接触型二极管结电容小，适用于高频检波、混频等电路。", "pitfall": ""}, {"type": "tf", "points": 1, "question": "肖特基二极管的正向压降低于普通硅二极管。", "options": [], "answer": 0, "explanation": "<strong>正确答案</strong>：正确。<br><br><strong>解析**：肖特基二极管正向压降约0.2-0.3V，低于普通硅二极管的0.7V。", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释PN结的单向导电性原理。", "options": [], "answer": "PN结正向偏置时，外加电场削弱内电场，耗尽层变窄，多子扩散增强，形成较大的正向电流，呈现低电阻。PN结反向偏置时，外加电场增强内电场，耗尽层变宽，多子扩散受阻，只有少子漂移形成很小的反向电流，呈现高电阻。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "比较二极管的理想模型、恒压降模型和小信号模型的适用场合。", "options": [], "answer": "理想模型：正向短路、反向开路，适用于定性分析和初步估算。恒压降模型：正向压降为常数（硅管0.7V），适用于一般工程计算。小信号模型：微变电阻 $r_d = V_T/I_D$，适用于小信号交流分析，需要先确定静态工作点。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "说明N型半导体和P型半导体的掺杂元素和载流子类型。", "options": [], "answer": "N型半导体：掺入五价元素（如磷、砷），多数载流子是自由电子，少数载流子是空穴。五价原子提供一个自由电子后成为正离子（施主杂质）。P型半导体：掺入三价元素（如硼、铝），多数载流子是空穴，少数载流子是自由电子。三价原子接受一个电子后成为负离子（受主杂质）。", "explanation": "", "pitfall": ""}, {"type": "short", "points": 6, "question": "解释PN结反向击穿的两种类型及其产生条件。", "options": [], "answer": "1. 雪崩击穿：反向电压增大到一定程度，漂移运动的少子获得足够动能，撞击出更多电子-空穴对，产生倍增效应。发生在掺杂浓度低、耗尽层宽的PN结。2. 齐纳击穿：反向电压增大到一定程度，强电场直接破坏共价键，产生大量电子-空穴对。发生在掺杂浓度高、耗尽层窄的PN结。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "试分析二极管整流电路（半波和桥式）的工作原理，并比较两种电路的优缺点。", "options": [], "answer": "半波整流：只利用交流电的正半周，二极管导通时负载获得电压，截止时负载电压为零。优点：电路简单，只需一个二极管。缺点：效率低（$V_L = 0.45V_2$），纹波大。桥式整流：利用交流电的正负两个半周，四个二极管交替导通。优点：效率高（$V_L = 0.9V_2$），纹波小，变压器利用率高。缺点：需要四个二极管，电路稍复杂。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 8, "question": "解释二极管小信号模型的建立条件和微变电阻 $r_d$ 的计算方法，并说明其在电路分析中的应用。", "options": [], "answer": "建立条件：二极管工作在正向偏置状态，且信号幅值很小（$v_d << V_T$），使二极管特性曲线在工作点附近近似为直线。微变电阻 $r_d = V_T/I_D$，其中 $V_T \\approx 26mV$（常温），$I_D$ 是静态工作点电流。应用：在小信号分析中，将二极管用 $r_d$ 替代，与其它元件组成线性电路，用叠加定理等方法求解。", "explanation": "", "pitfall": ""}, {"type": "essay", "points": 10, "question": "设计一个硅二极管稳压电路，要求输出电压稳定在5V，负载电流变化范围为10-50mA。选择合适的齐纳二极管，计算限流电阻，并分析电路性能。", "options": [], "answer": "选择 $V_Z = 5V$ 的齐纳二极管，设输入电压 $V_I = 12V$。限流电阻 $R = (V_I - V_Z)/I_Z$，取 $I_Z = 20mA$（中间值），则 $R = (12-5)/0.02 = 350\\Omega$，取标准值360Ω。当负载电流 $I_L = 10mA$ 时，$I_Z = (12-5)/360 - 0.01 = 9.4mA$；当 $I_L = 50mA$ 时，$I_Z = 19.4 - 0.05 = -0.6mA$（截止）。需要重新计算：取 $R = 150\\Omega$，$I_Z$ 范围为26.7mA-13.3mA，满足要求。输出电阻 $r_o = r_z // R \\approx r_z$，稳压系数与 $r_z$ 有关。", "explanation": "", "pitfall": ""}, {"type": "comprehensive", "points": 20, "question": "某硅二极管电路如图所示：$V_{DD} = 5V$，$R = 5k\\Omega$，$v_s = 0.1\\sin\\omega t$ V。(1)用恒压降模型求直流工作点；(2)用小信号模型求交流输出电压；(3)求总输出电压；(4)分析二极管的作用。", "options": [], "answer": "(1) 直流分析：令 $v_s = 0$，$V_D = 0.7V$，$I_D = (V_{DD} - V_D)/R = (5-0.7)/5k = 0.86mA$，$V_O = V_D = 0.7V$。(2) 交流分析：$r_d = V_T/I_D = 26mV/0.86mA = 30.2\\Omega$，$v_o = \\frac{r_d}{R+r_d}v_s \\approx \\frac{30.2}{5000+30.2} \\times 0.1\\sin\\omega t = 0.6\\sin\\omega t$ mV。(3) 总输出电压：$v_O = V_O + v_o = 0.7 + 0.0006\\sin\\omega t$ V。(4) 二极管的作用：提供直流偏置（0.7V），对交流信号起分压作用（衰减约83倍）。", "explanation": "", "pitfall": ""}];
+var LABELS = {"page_title": "章节测试", "section": {"choice": "一、选择题", "tf": "二、判断题", "short": "三、简答题", "essay": "四、问答题", "comprehensive": "五、综合题"}, "section_order": ["choice", "tf", "short", "essay", "comprehensive"], "points_suffix": "分", "true_label": "正确", "false_label": "错误", "placeholder": "在此作答...", "pitfall_prefix": "易错提醒：", "correct_label": "正确", "wrong_label": "错误", "answer_prefix": "正确答案：", "reference_label": "参考答案", "graded_label": "已批改", "grade_button": "提交批改", "score_label": "总分", "duration_prefix": "满分 100 分 | 建议 ", "duration_suffix": " 分钟 | 选择答案后点击提交批改"};
+
+function build(){
+  var container = document.getElementById('questions-container');
+  if (!container) { console.error('ExamPass: questions-container not found'); return; }
+  var h = '';
+  var sec = '';
+  var titles = LABELS.section;
+
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var s = q.type;
+    if (s !== sec) {
+      sec = s;
+      if (titles[s]) {
+        h += '<h3>' + titles[s] + '</h3>';
+      }
+    }
+
+    var qid = 'q' + i;
+    h += '<div class="q-card" id="card-' + qid + '">';
+    h += '<div class="q-num">' + (i+1) + '. (' + q.points + ' ' + LABELS.points_suffix + ')</div>';
+    h += '<div class="q-text">' + q.question + '</div>';
+
+    if (q.type === 'choice') {
+      var opts = q.options || [];
+      for (var j = 0; j < opts.length; j++) {
+        h += '<label class="option" id="opt-' + qid + '-' + j + '" onclick="sel(\'' + qid + '\',' + j + ')">';
+        h += '<input type="radio" name="' + qid + '" value="' + j + '">' + String.fromCharCode(65+j) + '. ' + opts[j] + '</label>';
+      }
+    } else if (q.type === 'tf') {
+      h += '<label class="option" id="opt-' + qid + '-0" onclick="sel(\'' + qid + '\',0)">';
+      h += '<input type="radio" name="' + qid + '" value="0">' + LABELS.true_label + '</label>';
+      h += '<label class="option" id="opt-' + qid + '-1" onclick="sel(\'' + qid + '\',1)">';
+      h += '<input type="radio" name="' + qid + '" value="1">' + LABELS.false_label + '</label>';
+    } else {
+      h += '<textarea class="q-textarea" id="text-' + qid + '" placeholder="' + LABELS.placeholder + '" rows="3"></textarea>';
+    }
+
+    h += '<div class="result" id="result-' + qid + '">';
+    h += '<span class="badge" id="badge-' + qid + '"></span><span id="correct-' + qid + '"></span>';
+    h += '<div class="explanation">' + q.explanation + '</div>';
+    if (q.pitfall) {
+      h += '<div class="pitfall">' + LABELS.pitfall_prefix + q.pitfall + '</div>';
+    }
+    h += '</div></div>';
+  }
+
+  container.innerHTML = h;
+
+  // Re-render MathJax for dynamically inserted formulas
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', build);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  build();
+}
+
+function sel(qid, idx) {
+  var prefix = 'opt-' + qid + '-';
+  var all = document.querySelectorAll('[id^="' + prefix + '"]');
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove('selected');
+  }
+  var target = document.getElementById('opt-' + qid + '-' + idx);
+  if (target) {
+    target.classList.add('selected');
+  }
+  var radio = document.querySelector('input[name="' + qid + '"][value="' + idx + '"]');
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+function gradeAll() {
+  var score = 0;
+  for (var i = 0; i < Q.length; i++) {
+    var q = Q[i];
+    var qid = 'q' + i;
+    var card = document.getElementById('card-' + qid);
+    var result = document.getElementById('result-' + qid);
+    var badge = document.getElementById('badge-' + qid);
+    var correctEl = document.getElementById('correct-' + qid);
+    if (!card || !result) continue;
+
+    result.style.display = 'block';
+
+    if (q.type === 'choice' || q.type === 'tf') {
+      var radio = document.querySelector('input[name="' + qid + '"]:checked');
+      if (radio && parseInt(radio.value) === q.answer) {
+        score += q.points;
+        card.classList.add('correct');
+        badge.className = 'badge badge-ok';
+        badge.textContent = LABELS.correct_label;
+        correctEl.innerHTML = '';
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      } else {
+        card.classList.add('wrong');
+        badge.className = 'badge badge-no';
+        badge.textContent = LABELS.wrong_label;
+        var ansText = q.type === 'choice'
+          ? String.fromCharCode(65+q.answer) + '. ' + (q.options ? q.options[q.answer] : '')
+          : (q.answer === 0 ? LABELS.true_label : LABELS.false_label);
+        correctEl.innerHTML = LABELS.answer_prefix + ansText;
+        if (radio) {
+          var wrongOpt = document.getElementById('opt-' + qid + '-' + radio.value);
+          if (wrongOpt) wrongOpt.classList.add('wrong-answer');
+        }
+        var correctOpt = document.getElementById('opt-' + qid + '-' + q.answer);
+        if (correctOpt) correctOpt.classList.add('correct-answer');
+      }
+    } else {
+      card.classList.add('correct');
+      badge.className = 'badge badge-ref';
+      badge.textContent = LABELS.reference_label;
+    }
+  }
+
+  var sb = document.getElementById('score-box');
+  if (sb) {
+    sb.style.display = 'block';
+    document.getElementById('score-num').textContent = score;
+    sb.scrollIntoView({behavior:'smooth'});
+  }
+
+  var opts = document.querySelectorAll('.option');
+  for (var i = 0; i < opts.length; i++) opts[i].style.pointerEvents = 'none';
+  var tas = document.querySelectorAll('.q-textarea');
+  for (var i = 0; i < tas.length; i++) tas[i].disabled = true;
+
+  var btn = document.getElementById('grade-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = LABELS.graded_label;
+  }
+
+  // Re-render MathJax for revealed explanations
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function(err) {
+      console.error('MathJax typeset error:', err);
+    });
+  }
+}
+
+</script>
+</body>
+</html>
